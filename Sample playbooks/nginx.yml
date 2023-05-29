@@ -1,0 +1,15 @@
+---
+  - name: install nginx on ubuntu 22.04
+    hosts: all
+    become: yes
+    tasks:
+      - name: update packages and install nginx
+        ansible.builtin.apt:
+          - name: nginx
+            state: present
+            update_cache: yes
+        ansible.builtin.systemd:
+          - name: start nginx
+            service:
+              state: started
+     
