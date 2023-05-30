@@ -110,21 +110,54 @@
 ## Evironment setup (Installing and configuring) for Ansible
 
 * Start two linux machines(vms) and rename them as Ansible control node and node(s)
-* Create a service account/user('sudo adduser') as devops in all machines with sudo permissions('sudo visudo')
-* Create a key pair ('ssh-keygen') in Ansible control node and copy the public key into the nodes from the control node ('ssh-copy-id username@ipaddress')
+
+![Alt text](shots/14.PNG)
+
+[ Note: (This is done in both the machines)
+To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and set 'PasswordAuthentication to yes' ] 
+
+![Alt text](shots/15.PNG)
+![Alt text](shots/16.PNG)
+
+=> Now need to restart the service, 'sudo service sshd restart'
+
+* Create a service account/user('sudo adduser devops') in all machines with sudo permissions('sudo visudo') (This is to be done in both the machines)
+
+![Alt text](shots/17.PNG)
+![Alt text](shots/18.PNG)
+
+[ Note : Login into both the machines as devops user using 'ssh devops@IPaddress']
+
+![Alt text](shots/19.PNG)
+![Alt text](shots/20.PNG)
 
 [ Optional: as both machines are in the same network we can also use private ipaddress of other machine to connect instead of public ipaddress ]
-* Install Ansible on the control node using commands :
+* Install Ansible on the control node using commands only on the control node :
 -> sudo apt update
 -> sudo apt install software-properties-common -y
 -> sudo add-apt-repository --yes --update ppa:ansible/ansible
 -> sudo apt install ansible -y
+* Verify ansible version ('ansible --version')
+
+![Alt text](shots/21.PNG)
 
 [ Optional: Disable password based authentication ]
+
 * Verify ansible version ('ansible --version')
-* Adding inventory - Create a file named hosts ( 'vi hosts')with one entry <private ipaddress of the node>
+* Create a keypair using 'ssh-keygen' and copy the sshkey to the node(private ip also works) machine using 'ssh-copy-id devops@IPaddress'
+
+![Alt text](shots/22.PNG)
+![Alt text](shots/23.PNG)
+
+* Try logging into the node machine from the control node machine using 'ssh IPaddress' (private IP address also works) and then logout 'exit'
+
+![Alt text](shots/24.PNG)
+![Alt text](shots/25.PNG)
+
+* Adding inventory - Create a file named hosts ( 'vi hosts') with entry (private IPaddress of the node)
 * Check connectivity by executing 'ansible -m ping -i hosts all'
 
+![Alt text](shots/26.PNG)
 
 
 
