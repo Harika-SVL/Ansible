@@ -65,6 +65,7 @@
 
 ![Alt text](shots/9.PNG)
 
+* In this it is a push based configuration management
 * Here the control node can execute desired state on nodes using
 => adhoc commands
 => playbooks (YAML files)
@@ -90,7 +91,39 @@
 
 * To create a keypair use : 'ssh-keygen' command
 
+![Alt text](shots/11.PNG)
 
+* Now the public key to linuxmachine 'ssh-copy-id username@ipaddess'
+
+![Alt text](shots/12.PNG)
+
+* connect to the machine using private key 'ssh -i <path-to-private key> username@ipaddress'
+* Generally private keys created will have extension of .pem i.e we create a Service account public and private key. 
+* Copy the service account public key to all the servers and also disable the password based authentication
+
+## Setting up sudo permissions
+* We need to add devops user to the sudoers group (Wheel in Redhat server)
+* We use 'sudo visudo' command
+
+![Alt text](shots/13.PNG)
+
+## Evironment setup (Installing and configuring) for Ansible
+
+* Start two linux machines(vms) and rename them as Ansible control node and node(s)
+* Create a service account/user('sudo adduser') as devops in all machines with sudo permissions('sudo visudo')
+* Create a key pair ('ssh-keygen') in Ansible control node and copy the public key into the nodes from the control node ('ssh-copy-id username@ipaddress')
+
+[ Optional: as both machines are in the same network we can also use private ipaddress of other machine to connect instead of public ipaddress ]
+* Install Ansible on the control node using commands :
+-> sudo apt update
+-> sudo apt install software-properties-common -y
+-> sudo add-apt-repository --yes --update ppa:ansible/ansible
+-> sudo apt install ansible -y
+
+[ Optional: Disable password based authentication ]
+* Verify ansible version ('ansible --version')
+* Adding inventory - Create a file named hosts ( 'vi hosts')with one entry <private ipaddress of the node>
+* Check connectivity by executing 'ansible -m ping -i hosts all'
 
 
 
