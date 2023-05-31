@@ -133,9 +133,13 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 
 [ Optional: as both machines are in the same network we can also use private ipaddress of other machine to connect instead of public ipaddress ]
 * Install Ansible on the control node using commands only on the control node :
+
 -> sudo apt update
+
 -> sudo apt install software-properties-common -y
+
 -> sudo add-apt-repository --yes --update ppa:ansible/ansible
+
 -> sudo apt install ansible -y
 * Verify ansible version ('ansible --version')
 
@@ -143,7 +147,6 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 
 [ Optional: Disable password based authentication ]
 
-* Verify ansible version ('ansible --version')
 * Create a keypair using 'ssh-keygen' and copy the sshkey to the node(private ip also works) machine using 'ssh-copy-id devops@IPaddress'
 
 ![Alt text](shots/22.PNG)
@@ -182,11 +185,12 @@ E.g : For Gathering facts
 
 Syntax : YAML format 
  * Running a playbook (10 times)
-    'ansible-playbook playbook.yml -f 10'
+    'ansible-playbook -i [inventory-path] [playbook-path]'
 
 ## Sample playbook execution
-   playbook :
-   ---
+ 
+ playbook : hello.yml
+   --- 
 - name: hello ansible
   hosts: all
   become: yes
@@ -199,9 +203,11 @@ Syntax : YAML format
 
 Commands to execute playbook:
 
-* mkdir (directory name) 
-* vi 'filename.yml'
-* ansible-playbook -i inventory/hosts playbook/filename.yml
+* mkdir inventory and cd inventory/
+* vi hosts  (here add ip of node into this file) and cd ..
+* mkdir class-playbooks and cd  class-playbooks/
+* vi hello.yml and cd ..
+* ansible-playbook -i inventory/hosts class-playbooks/hello.yml
 
 ## Playbook simantics :
 * Here smallest unit of work is done by module 
@@ -210,7 +216,34 @@ Commands to execute playbook:
 
 ![Alt text](shots/28.PNG)
 
+## WOW (Ways Of Working)
+1.  list down all the manual steps
+2. Ensure all the steps are working
+3. For each step find a module and express the desired state
 
+## Sample-1 : Install apache server
+* sudo apt update
+* sudo apt install apache2 -y
+* Verify installation 'http://public-ip' 
+* For writing playbook we first search for module as 'package in ansible'
+* Now select parameters
 
+ playbook : apache2.yml
+---
+- name: install apache server
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
 
+Commands to execute playbook :
 
+* mkdir inventory and cd inventory/
+* vi hosts  (here add ip of node into this file) and cd ..
+* mkdir class-playbooks and cd  class-playbooks/
+* vi apache2.yml and cd ..
+* ansible-playbook -i inventory/hosts class-playbooks/apache2.yml 
