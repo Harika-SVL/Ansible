@@ -159,6 +159,57 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 
 ![Alt text](shots/26.PNG)
 
+## Communication types
+
+* Ansible can communicate with nodes by using two approaches
+1. adhoc commands : (build command for desired state)
+
+* command uses the /usr/bin/ansible command-line tool to automate a single task on one or more managed nodes.
+* These are quick and easy, but they are not reusable.
+* These demonstrate the simplicity and power of Ansible. The concepts will port over directly to the playbook language.
+* Theses are great for tasks you repeat rarely.
+
+Syntax : ansible [pattern] -m [module] -a "[module options]"
+
+E.g : For Gathering facts
+      'ansible all -m ansible.builtin.setup'
+
+2. Playbook : (create file for desired state)
+
+* These offer a repeatable, re-usable, simple configuration management and multi-machine deployment system (well suited to deploying complex applications).
+* If you need to execute a task with Ansible more than once, write a playbook and put it under source control,then you can use the playbook to push out new configuration or confirm the configuration of remote systems.
+* Playbooks with multiple ‘plays’ can orchestrate multi-machine deployments, running one play on your webservers, then another play on your database servers, then a third play on your network infrastructure, and so on
+
+Syntax : YAML format 
+ * Running a playbook (10 times)
+    'ansible-playbook playbook.yml -f 10'
+
+## Sample playbook execution
+   playbook :
+   ---
+- name: hello ansible
+  hosts: all
+  become: yes
+  tasks:
+    - name: update packages and install tree
+      apt:
+        name: tree
+        state: present
+        update_cache: yes
+
+Commands to execute playbook:
+
+* mkdir (directory name) 
+* vi 'filename.yml'
+* ansible-playbook -i inventory/hosts playbook/filename.yml
+
+## Playbook simantics :
+* Here smallest unit of work is done by module 
+
+![Alt text](shots/27.PNG)
+
+![Alt text](shots/28.PNG)
+
 
 
 
