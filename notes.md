@@ -20,11 +20,13 @@
 3. Reusable
 
 ## Configuration Management (CM)
+
 * There are two types :
 1. PULL based configuration
 2. PUSH based configuration
 
 ### PULL based Configuration Management :
+
 * Communication direction => Node to CM server
 
 ![Alt text](shots/3.PNG)
@@ -41,6 +43,7 @@
 ![Alt text](shots/5.PNG)
 
 ### PUSH based Configuration Management :
+
 * Communication direction => CM Server to Node
 
 ![Alt text](shots/6.PNG)
@@ -61,6 +64,7 @@
 * Referrence : https://docs.ansible.com/ 
 
 ## Architecture and Workflow
+
 * Basic workflow
 
 ![Alt text](shots/9.PNG)
@@ -82,6 +86,7 @@
 * Having username and password is not a sensible way so we use keypair based authentication
 
 ## Key pair authetication using RSA (Rivest, Shamir, Adleman)
+
 * In this we generate two keys (i.e., public and private) of some mathematical prime number calulations
 
 => Public key : It comprises of two numbers, in which one number is the result of the product of two large prime numbers. This key is provided to all the users.
@@ -102,6 +107,7 @@
 * Copy the service account public key to all the servers and also disable the password based authentication
 
 ## Setting up sudo permissions
+
 * We need to add devops user to the sudoers group (Wheel in Redhat server)
 * We use 'sudo visudo' command
 
@@ -132,15 +138,14 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 ![Alt text](shots/20.PNG)
 
 [ Optional: as both machines are in the same network we can also use private ipaddress of other machine to connect instead of public ipaddress ]
+
 * Install Ansible on the control node using commands only on the control node :
 
 -> sudo apt update
-
 -> sudo apt install software-properties-common -y
-
 -> sudo add-apt-repository --yes --update ppa:ansible/ansible
-
 -> sudo apt install ansible -y
+
 * Verify ansible version ('ansible --version')
 
 ![Alt text](shots/21.PNG)
@@ -157,14 +162,15 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 ![Alt text](shots/24.PNG)
 ![Alt text](shots/25.PNG)
 
-* Adding inventory - Create a file named hosts ( 'vi hosts') with entry (private IPaddress of the node)
-* Check connectivity by executing 'ansible -m ping -i hosts all'
+* Adding inventory ('mkdir inventory') - Create a file named hosts ( 'vi inventory/hosts') with entry (public-IP of the node) (private-IP works when machines in same network)
+* Check connectivity by executing 'ansible -m ping -i inventory/hosts all'
 
 ![Alt text](shots/26.PNG)
 
 ## Communication types
 
-* Ansible can communicate with nodes by using two approaches
+* Ansible can communicate with nodes by using two approaches :
+
 1. adhoc commands : (build command for desired state)
 
 * command uses the /usr/bin/ansible command-line tool to automate a single task on one or more managed nodes.
@@ -182,14 +188,29 @@ E.g : For Gathering facts
 * These offer a repeatable, re-usable, simple configuration management and multi-machine deployment system (well suited to deploying complex applications).
 * If you need to execute a task with Ansible more than once, write a playbook and put it under source control,then you can use the playbook to push out new configuration or confirm the configuration of remote systems.
 * Playbooks with multiple ‘plays’ can orchestrate multi-machine deployments, running one play on your webservers, then another play on your database servers, then a third play on your network infrastructure, and so on
+* Here smallest unit of work is done by module 
+
+![Alt text](shots/27.PNG)
 
 Syntax : YAML format 
- * Running a playbook (10 times)
-    'ansible-playbook -i [inventory-path] [playbook-path]'
+
+ * Running a playbook 
+    ('ansible-playbook -i [inventory-path] [playbook-path]')
+* YAML supports yes-no for true-false unlike JASON
+
+![Alt text](shots/28.PNG)
 
 ## Sample playbook execution
  
- playbook : hello.yml
+* Complete the entire Ansible control node - node setup
+* Create inventory and add node hosts
+  * mkdir inventory
+  * vi inventory/hosts
+* Create a directory and add a yaml file
+  * mkdir playbooks
+  * vi playbooks/hello.yml
+
+ Playbook : playbooks/hello.yml
    --- 
 - name: hello ansible
   hosts: all
@@ -201,34 +222,37 @@ Syntax : YAML format
         state: present
         update_cache: yes
 
-Commands to execute playbook:
+Commands to execute :
 
-* mkdir inventory and cd inventory/
-* vi hosts  (here add ip of node into this file) and cd ..
-* mkdir class-playbooks and cd  class-playbooks/
-* vi hello.yml and cd ..
-* ansible-playbook -i inventory/hosts class-playbooks/hello.yml
-
-## Playbook simantics :
-* Here smallest unit of work is done by module 
-
-![Alt text](shots/27.PNG)
-
-![Alt text](shots/28.PNG)
+* ansible-playbook -i inventory/hosts playbooks/hello.yml
 
 ## WOW (Ways Of Working)
-1.  list down all the manual steps
+
+1. list down all the manual steps
 2. Ensure all the steps are working
 3. For each step find a module and express the desired state
 
 ## Sample-1 : Install apache server
+
+ Manual steps :
+
 * sudo apt update
 * sudo apt install apache2 -y
 * Verify installation 'http://public-ip' 
-* For writing playbook we first search for module as 'package in ansible'
+
+Playbook steps :
+
+* Complete the entire Ansible control node - node setup
+* Create inventory and add node hosts
+  -> mkdir inventory
+  -> vi inventory/hosts
+* create a directory and add a yaml file
+  -> mkdir playbooks
+  -> vi playbooks/apache2.yml
+* For writing playbook we first search for module as 'apt in ansible'
 * Now select parameters
 
- playbook : apache2.yml
+ Playbook : playbooks/apache2.yml
 ---
 - name: install apache server
   hosts: all
@@ -240,10 +264,136 @@ Commands to execute playbook:
         update_cache: yes
         state: present
 
-Commands to execute playbook :
+Commands to execute :
 
-* mkdir inventory and cd inventory/
-* vi hosts  (here add ip of node into this file) and cd ..
-* mkdir class-playbooks and cd  class-playbooks/
-* vi apache2.yml and cd ..
-* ansible-playbook -i inventory/hosts class-playbooks/apache2.yml 
+* ansible-playbook -i inventory/hosts playbooks/apache2.yml
+
+## Sample-2 : Install LAMP server on ubuntu
+   ( skipping mysql installation )
+
+ Manual steps :
+
+* sudo apt update
+* sudo apt install apache2 -y
+* sudo apt install php libapache2-mod-php php-mysql -y
+[# Create a file called as /var/www/html/info.php with below content
+# <?php phpinfo(); ?>]
+* sudo -i
+* echo '<?php phpinfo(); ?>' > /var/www/html/info.php
+* exit
+* sudo systemctl restart apache2
+* Verify installation 'http://public-ip/info.php' 
+
+Playbook steps :
+
+* Complete the entire Ansible control node - node setup
+* Create inventory and add node hosts
+  -> mkdir inventory
+  -> vi inventory/hosts
+* create a directory and add a yaml file
+  -> mkdir playbooks
+  -> vi playbooks/apache2.yml
+* For writing playbook we first search for module as 'apt in ansible'
+* Now select parameters
+
+ Playbook : playbooks/lamp/ubuntu.yml
+---
+- name: install lamp server on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: update packages and install apache
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+    - name: install php packages
+      ansible.builtin.apt:
+        name:
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        state: present
+    - name: copy the info.php page
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+    - name: restart apache2
+      ansible.builtin.systemd:
+        name: apache2
+        state: restarted
+
+playbooks/lamp/info.php
+
+* <?php phpinfo(); ?>
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
+
+* ansible-playbook -i inventory/hosts playbooks/ubuntu.yml
+
+## Sample-3 : Install LAMP stack on Redhat9
+   ( skipping mysql installation )
+
+ Manual steps :
+
+* sudo yum install httpd -y
+* sudo systemctl enable httpd
+* sudo systemctl start httpd
+* sudo yum install php -y
+* sudo -i
+* echo '<?php phpinfo(); ?>' > /var/www/html/info.php
+* exit
+* sudo systemctl restart httpd
+* Verify installation 'http://public-ip/info.php' 
+
+Playbook steps :
+
+* Complete the entire Ansible control node - node setup
+* Create inventory and add node hosts
+  -> mkdir inventory
+  -> vi inventory/hosts
+* create a directory and add a yaml file
+  -> mkdir playbooks
+  -> vi playbooks/apache2.yml
+* For writing playbook we first search for module as 'apt in ansible'
+* Now select parameters
+
+ Playbook : playbooks/lamp/redhat.yml
+---
+- name: install lamp server on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache server
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+    - name: enable and start apache
+      ansible.builtin.systemd:
+        name: httpd
+        enabled: yes
+        state: started
+    - name: install apache server
+      ansible.builtin.yum:
+        name: php
+        state: present
+    - name: copy the info.php file
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+    - name: restart apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: restarted
+
+playbooks/lamp/info.php
+
+* <?php phpinfo(); ?>
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/redhat.yml
+
+* ansible-playbook -i inventory/hosts playbooks/redhat.yml
