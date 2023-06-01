@@ -224,6 +224,9 @@ Syntax : YAML format
 
 Commands to execute :
 
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/hello.yml
+* ansible-playbook -i inventory/hosts --check playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
 * ansible-playbook -i inventory/hosts playbooks/hello.yml
 
 ## WOW (Ways Of Working)
@@ -266,6 +269,9 @@ Playbook steps :
 
 Commands to execute :
 
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/apache2.yml
+* ansible-playbook -i inventory/hosts --check playbooks/apache2.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts playbooks/apache2.yml
 
 ## Sample-2 : Install LAMP server on ubuntu
@@ -330,7 +336,8 @@ playbooks/lamp/info.php
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
-
+* ansible-playbook -i inventory/hosts --check playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
 * ansible-playbook -i inventory/hosts playbooks/ubuntu.yml
 
 ## Sample-3 : Install LAMP stack on Redhat9
@@ -395,5 +402,128 @@ playbooks/lamp/info.php
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/redhat.yml
-
+* ansible-playbook -i inventory/hosts --check playbooks/redhat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/redhat.yml
 * ansible-playbook -i inventory/hosts playbooks/redhat.yml
+
+## Handlers
+
+* Sometimes you want a task to run only when a change is made on a machine. 
+* For example, you may want to restart a service if a task updates the configuration of that service, but not if the configuration is unchanged.Ansible uses handlers to address this use case. 
+* Handlers are tasks that only run when notified.
+
+E.g. : playbooks/lamp/redhat.yaml
+---
+- name: install lamp server on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: install apache server
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+    - name: enable and start apache
+      ansible.builtin.systemd:
+        name: httpd
+        enabled: yes
+        state: started
+    - name: install apache server
+      ansible.builtin.yum:
+        name: php
+        state: present
+      notify:
+        - restart apache
+    - name: copy the info.php file
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+      notify:
+        - restart apache
+  handlers:
+    - name: restart apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: restarted
+
+E.g. : playbooks/lamp/ubuntu.yaml
+---
+- name: install lamp server on ubuntu
+  hosts: all
+  become: yes
+  tasks:
+    - name: update packages and install apache
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+    - name: install php packages
+      ansible.builtin.apt:
+        name:
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        state: present
+      notify:
+        - restart apache2
+    - name: copy the info.php page
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+      notify:
+        - restart apache2
+  handlers:
+    - name: restart apache2
+      ansible.builtin.systemd:
+        name: apache2
+        state: restarted
+
+## Inventory
+
+* Inventory in Ansible represents the hosts which we need to connect to.
+* Ansible inventory is broadly classified into two types :
+  1. Static inventory: 
+   * where we mention the list of nodes to connect to (in a file)
+  2. Dynamic inventory: 
+    * where we mention some script/plugin which will dynamically find out the nodes to connect to
+
+## Static inventory
+
+* Static inventory can be mentioned in two formats :
+
+  1. INI format
+
+  * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
+  * The headings in brackets are group names, which are used in classifying hosts and deciding what hosts you are controlling at what times and for what purpose. 
+
+  E.g : INI format - hosts.ini
+  
+        [ubuntu]
+        172.31.27.136
+
+        [redhat]
+        172.31.23.22
+
+        [webserver]
+        172.31.27.136
+        172.31.23.22
+
+  2. YAML format
+
+  * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
+
+  E.g : YAML format - hosts.yml
+  
+        ---
+        all:
+          children:
+            ubuntu:
+              hosts:
+                172.31.27.136:
+            redhat:
+              hosts:
+                172.31.23.22:
+            webserver:
+              hosts:
+                172.31.27.136:
+                172.31.23.22:
+ 
