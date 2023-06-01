@@ -481,16 +481,16 @@ E.g. : playbooks/lamp/ubuntu.yaml
 
 * Inventory in Ansible represents the hosts which we need to connect to.
 * Ansible inventory is broadly classified into two types :
-  1. Static inventory: 
+  (a) Static inventory: 
    * where we mention the list of nodes to connect to (in a file)
-  2. Dynamic inventory: 
+  (b) Dynamic inventory: 
     * where we mention some script/plugin which will dynamically find out the nodes to connect to
 
 ## Static inventory
 
 * Static inventory can be mentioned in two formats :
 
-  1. INI format
+  (a) INI format
 
   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
   * The headings in brackets are group names, which are used in classifying hosts and deciding what hosts you are controlling at what times and for what purpose. 
@@ -507,7 +507,7 @@ E.g. : playbooks/lamp/ubuntu.yaml
         172.31.27.136
         172.31.23.22
 
-  2. YAML format
+  (b) YAML format
 
   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
 
@@ -527,3 +527,45 @@ E.g. : playbooks/lamp/ubuntu.yaml
                 172.31.27.136:
                 172.31.23.22:
  
+ ## Facts
+
+ * Ansible collects information about the node on which it is executing by the help of module called as 'setup'
+* Playbook by default collects information about nodes where it is executing, we can use this with the help of variables
+* To display the information we use 'ansible -m 'setup' -i 'localhost, ' all' command and get a JSON format info
+* Collecting information can be disabled as well
+
+---
+- name: do something
+  hosts: all
+  gather_facts: no
+  ...
+  ...
+* In the playbook the facts will be collected and will be available in a special variables ansible_facts
+* Consider the below playbook :
+
+---
+- name: exploring facts
+  become: no
+  hosts: all
+  tasks:
+    - name: print os details
+      ansible.builtin.debug:
+        msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
+
+* The statement ansible_facts['os_family'] represents accessing os family from the facts collected
+* From facts the variables can be accessed with full names ansible_default_ipv4 or ansible_facts['default_ipv4']
+
+---
+- name: exploring facts
+  become: no
+  hosts: all
+  tasks:
+    - name: print os details
+      ansible.builtin.debug:
+        var: ansible_default_ipv4
+    - name: same info
+      ansible.builtin.debug:
+        var: ansible_facts['default_ipv4']
+
+* Lets apply conditionals to ansible playbook Refer Here
+* Refer Here for the changeset and focus on combined.json
