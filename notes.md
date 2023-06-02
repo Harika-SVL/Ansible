@@ -647,4 +647,48 @@ playbook : factsdemo.yml
         name: apache2
         state: restarted
 
-      
+## METRIC BEATS INSTALLATION
+
+ Manual steps (using apt package):
+       
+* wget -q0 – https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+* sudo apt-get install apt-transport-https
+* echo “deb https://artifacts.elastic.co/packages/8.x/apt stable main” | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
+* sudo apt-get update && sudo apt-get install metricbeat
+* sudo systemctl enable metricbeat
+* sudo systemctl start metricbeat
+* sudo systemctl status metricbeat
+ 
+playbook : metricbeat.yml
+
+---
+  - name: install metric-beat 
+    hosts: ubuntu
+    become: yes
+    tasks:
+      - name: update packages and install metric-beat   
+        ansible.builtin.apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: install apt-transport-https package
+        ansible.builtin.apt:
+          name: apt-transport-https
+          update_cache: yes
+          state: present                                                
+      - name: saving repo
+        ansible.builtin.apt_repository:
+          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+          filename: /etc/apt/sources.list.d/elastic-8.x.list
+          update_cache: yes
+          state: present
+      - name: update packages and install metricbeat
+        ansible.builtin.apt:
+          name: metricbeat
+          update_cache: yes
+          state: present
+      - name: enable metricbeat
+        ansible.builtin.systemd:
+          name: metricbeat
+          enabled: yes    
+          state: started 
+     
