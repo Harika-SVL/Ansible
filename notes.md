@@ -567,5 +567,84 @@ E.g. : playbooks/lamp/ubuntu.yaml
       ansible.builtin.debug:
         var: ansible_facts['default_ipv4']
 
-* Lets apply conditionals to ansible playbook Refer Here
-* Refer Here for the changeset and focus on combined.json
+## Conditionals
+
+* In a playbook, you may want to execute different tasks, or have different goals, depending on the value of a fact (data about the remote system), a variable, or the result of a previous task. 
+* You may want the value of some variables to depend on the value of other variables (or) you may want to create additional groups of hosts based on whether the hosts match other criteria. You can do all of these things with conditionals.
+
+playbook : factsdemo.yml
+---
+- name: exploring facts
+  become: no
+  hosts: all
+  tasks:
+    - name: print os details
+      ansible.builtin.debug:
+        msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
+
+  combined.yml
+
+  ---
+- name: install lamp server on ubuntu
+  hosts: redhat
+  become: yes
+  tasks:
+    - name: install httpd server
+      ansible.builtin.yum:
+        name: httpd
+        state: present
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: enable and start httpd
+      ansible.builtin.systemd:
+        name: httpd
+        enabled: yes
+        state: started
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: install httpd php server
+      ansible.builtin.yum:
+        name: php
+        state: present
+      notify:
+        - restart apache
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: copy the info.php file in httpd
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+      notify:
+        - restart apache
+      when: ansible_facts['os_family'] == 'RedHat'
+    - name: update packages and install apache
+      ansible.builtin.apt:
+        name: apache2
+        update_cache: yes
+        state: present
+      when: ansible_facts['os_family'] == 'Ubuntu'
+    - name: install php packages
+      ansible.builtin.apt:
+        name:
+          - php
+          - libapache2-mod-php
+          - php-mysql
+        state: present
+      notify:
+        - restart apache2
+      when: ansible_facts['os_family'] == 'Ubuntu'
+    - name: copy the info.php page
+      ansible.builtin.copy:
+        src: info.php
+        dest: /var/www/html/info.php
+      notify:
+        - restart apache2
+      when: ansible_facts['os_family'] == 'Ubuntu'
+  handlers:
+    - name: restart apache
+      ansible.builtin.systemd:
+        name: httpd
+        state: restarted
+    - name: restart apache2
+      ansible.builtin.systemd:
+        name: apache2
+        state: restarted
+
+      
