@@ -98,12 +98,12 @@
 
 ![Alt text](shots/11.PNG)
 
-* Now the public key to linuxmachine 'ssh-copy-id username@ipaddess'
+* Now the public key to linux machine 'ssh-copy-id < username >@ipaddess'
 
 ![Alt text](shots/12.PNG)
 
-* connect to the machine using private key 'ssh -i <path-to-private key> username@ipaddress'
-* Generally private keys created will have extension of .pem i.e we create a Service account public and private key. 
+* Connect to the machine using private key 'ssh -i < path-to-private key > username@ipaddress'
+* Generally private keys created will have extension of .pem (i.e we create a Service account public and private key). 
 * Copy the service account public key to all the servers and also disable the password based authentication
 
 ## Setting up sudo permissions
@@ -120,7 +120,7 @@
 ![Alt text](shots/14.PNG)
 
 [ Note: (This is done in both the machines)
-To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and set 'PasswordAuthentication to yes' ] 
+To enable password authentications edit config 'sudo vi /etc/ssh/sshd_config' and set 'PasswordAuthentication to yes' ] 
 
 ![Alt text](shots/15.PNG)
 ![Alt text](shots/16.PNG)
@@ -132,7 +132,7 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 ![Alt text](shots/17.PNG)
 ![Alt text](shots/18.PNG)
 
-[ Note : Login into both the machines as devops user using 'ssh devops@IPaddress']
+[ Note : Login into both the machines as devops user using 'ssh devops@< same machine IPaddress >']
 
 ![Alt text](shots/19.PNG)
 ![Alt text](shots/20.PNG)
@@ -152,12 +152,12 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 
 [ Optional: Disable password based authentication ]
 
-* Create a keypair using 'ssh-keygen' and copy the sshkey to the node(private ip also works) machine using 'ssh-copy-id devops@IPaddress'
+* Create a keypair using 'ssh-keygen' and copy the ssh-key to the node(private ip also works) machine using 'ssh-copy-id devops@< other machine IPaddress >'
 
 ![Alt text](shots/22.PNG)
 ![Alt text](shots/23.PNG)
 
-* Try logging into the node machine from the control node machine using 'ssh IPaddress' (private IP address also works) and then logout 'exit'
+* Try logging into the node machine from the control node machine using 'ssh < other machine IPaddress >' (private IP address also works) and then logout 'exit'
 
 ![Alt text](shots/24.PNG)
 ![Alt text](shots/25.PNG)
@@ -176,7 +176,7 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 * command uses the /usr/bin/ansible command-line tool to automate a single task on one or more managed nodes.
 * These are quick and easy, but they are not reusable.
 * These demonstrate the simplicity and power of Ansible. The concepts will port over directly to the playbook language.
-* Theses are great for tasks you repeat rarely.
+* These are great for tasks you repeat rarely.
 
 Syntax : ansible [pattern] -m [module] -a "[module options]"
 
@@ -195,7 +195,7 @@ E.g : For Gathering facts
 Syntax : YAML format 
 
  * Running a playbook 
-    ('ansible-playbook -i [inventory-path] [playbook-path]')
+    ('ansible-playbook -i < inventory-path > < playbook-path >')
 * YAML supports yes-no for true-false unlike JASON
 
 ![Alt text](shots/28.PNG)
@@ -210,7 +210,7 @@ Syntax : YAML format
   * mkdir playbooks
   * vi playbooks/hello.yml
 
- Playbook : playbooks/hello.yml :
+ Playbook : playbooks/hello.yml 
 
 ![Alt text](shots/39.PNG)
 ![Alt text](shots/29.PNG)
@@ -223,7 +223,7 @@ Commands to execute :
 
 ![Alt text](shots/30.PNG)
 
-Output on node machine :
+* Check for output on node machine 
 
 ![Alt text](shots/31.PNG)
 
@@ -254,7 +254,7 @@ Playbook steps :
   -> mkdir playbooks
   -> vi playbooks/apache2.yml
 
- Playbook : playbooks/apache2.yml :
+ Playbook : playbooks/apache2.yml 
 
 ![Alt text](shots/38.PNG)
 ![Alt text](shots/34.PNG)
@@ -264,10 +264,12 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts playbooks/apache2.yml
-* Check status on the node 'sudo systemctl status apache2'
-* Expose using node Ipaddress
 
 ![Alt text](shots/35.PNG)
+
+* Check status on the node 'sudo systemctl status apache2'
+* Expose using node IPaddress
+
 ![Alt text](shots/36.PNG)
 ![Alt text](shots/37.PNG)
 
@@ -306,31 +308,6 @@ Playbook steps :
 * Now select parameters
 
  Playbook : playbooks/lamp-ubuntu.yml
----
-- name: install lamp server on ubuntu
-  hosts: all
-  become: yes
-  tasks:
-    - name: update packages and install apache
-      ansible.builtin.apt:
-        name: apache2
-        update_cache: yes
-        state: present
-    - name: install php packages
-      ansible.builtin.apt:
-        name:
-          - php
-          - libapache2-mod-php
-          - php-mysql
-        state: present
-    - name: copy the info.php page
-      ansible.builtin.copy:
-        src: info.php
-        dest: /var/www/html/info.php
-    - name: restart apache2
-      ansible.builtin.systemd:
-        name: apache2
-        state: restarted
 
 ![Alt text](shots/46.PNG)
 
@@ -349,7 +326,7 @@ Commands to execute :
 ![Alt text](shots/43.PNG)
 ![Alt text](shots/44.PNG)
 
-* Check status on node and expose node IPaddress
+* Check status on node and expose with node IPaddress
 
 ![Alt text](shots/47.PNG)
 ![Alt text](shots/48.PNG)
@@ -378,13 +355,13 @@ Playbook steps :
   -> vi inventory/hosts
 * create a directory and add a yaml file
   -> mkdir playbooks
-  -> vi playbooks/apache2.yml
+  -> vi playbooks/lamp-redhat.yml
 * For writing playbook we first search for module as 'apt in ansible'
 * Now select parameters
 
- Playbook : playbooks/lamp/redhat.yml
+ Playbook : playbooks/lamp-redhat.yml
 ---
-- name: install lamp server on ubuntu
+- name: install lamp server on redhat
   hosts: all
   become: yes
   tasks:
@@ -410,16 +387,15 @@ Playbook steps :
         name: httpd
         state: restarted
 
-playbooks/lamp/info.php
+playbooks/info.php
 
 * <?php phpinfo(); ?>
 
 Commands to execute :
 
-* ansible-playbook -i inventory/hosts --syntax-check playbooks/redhat.yml
-* ansible-playbook -i inventory/hosts --check playbooks/redhat.yml
-* ansible-playbook -i inventory/hosts --list-hosts playbooks/redhat.yml
-* ansible-playbook -i inventory/hosts playbooks/redhat.yml
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/lamp-redhat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/lamp-redhat.yml
+* ansible-playbook -i inventory/hosts playbooks/lamp-redhat.yml
 
 ## Handlers
 
@@ -427,9 +403,9 @@ Commands to execute :
 * For example, you may want to restart a service if a task updates the configuration of that service, but not if the configuration is unchanged.Ansible uses handlers to address this use case. 
 * Handlers are tasks that only run when notified.
 
-E.g. : playbooks/lamp/redhat.yaml
+E.g. : playbooks/redhat.yaml
 ---
-- name: install lamp server on ubuntu
+- name: install lamp server on redhat
   hosts: all
   become: yes
   tasks:
@@ -460,7 +436,13 @@ E.g. : playbooks/lamp/redhat.yaml
         name: httpd
         state: restarted
 
-E.g. : playbooks/lamp/ubuntu.yaml
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/redhat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/redhat.yml
+* ansible-playbook -i inventory/hosts playbooks/redhat.yml
+
+E.g. : playbooks/ubuntu.yaml
 ---
 - name: install lamp server on ubuntu
   hosts: all
@@ -492,6 +474,12 @@ E.g. : playbooks/lamp/ubuntu.yaml
         name: apache2
         state: restarted
 
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts playbooks/ubuntu.yml        
+
 ## Inventory
 
 * Inventory in Ansible represents the hosts which we need to connect to.
@@ -510,7 +498,7 @@ E.g. : playbooks/lamp/ubuntu.yaml
   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
   * The headings in brackets are group names, which are used in classifying hosts and deciding what hosts you are controlling at what times and for what purpose. 
 
-  E.g : INI format - hosts.ini
+E.g : INI format - hosts.ini
   
         [ubuntu]
         172.31.27.136
@@ -526,9 +514,9 @@ E.g. : playbooks/lamp/ubuntu.yaml
 
   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
 
-  E.g : YAML format - hosts.yml
+E.g : YAML format - hosts.yml
   
-        ---
+
         all:
           children:
             ubuntu:
@@ -549,14 +537,11 @@ E.g. : playbooks/lamp/ubuntu.yaml
 * To display the information we use 'ansible -m 'setup' -i 'localhost, ' all' command and get a JSON format info
 * Collecting information can be disabled as well
 
----
-- name: do something
-  hosts: all
-  gather_facts: no
-  ...
-  ...
+![Alt text](shots/50.PNG)
+
 * In the playbook the facts will be collected and will be available in a special variables ansible_facts
-* Consider the below playbook :
+
+playbook : playbooks/distribution.yml
 
 ---
 - name: exploring facts
@@ -570,6 +555,17 @@ E.g. : playbooks/lamp/ubuntu.yaml
 * The statement ansible_facts['os_family'] represents accessing os family from the facts collected
 * From facts the variables can be accessed with full names ansible_default_ipv4 or ansible_facts['default_ipv4']
 
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/distribution.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/distribution.yml
+* ansible-playbook -i inventory/hosts playbooks/distribution.yml        
+
+
+
+
+playbook : playbooks/ipv4.yml
+
 ---
 - name: exploring facts
   become: no
@@ -582,12 +578,20 @@ E.g. : playbooks/lamp/ubuntu.yaml
       ansible.builtin.debug:
         var: ansible_facts['default_ipv4']
 
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/ipv4.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/ipv4.yml
+* ansible-playbook -i inventory/hosts playbooks/ipv4.yml        
+
+
 ## Conditionals
 
 * In a playbook, you may want to execute different tasks, or have different goals, depending on the value of a fact (data about the remote system), a variable, or the result of a previous task. 
 * You may want the value of some variables to depend on the value of other variables (or) you may want to create additional groups of hosts based on whether the hosts match other criteria. You can do all of these things with conditionals.
 
-playbook : factsdemo.yml
+playbook : playbooks/factsdemo.yml
+
 ---
 - name: exploring facts
   become: no
@@ -597,9 +601,16 @@ playbook : factsdemo.yml
       ansible.builtin.debug:
         msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
 
-  combined.yml
+Commands to execute :
 
-  ---
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/factsdemo.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/factsdemo.yml
+* ansible-playbook -i inventory/hosts playbooks/factsdemo.yml        
+
+
+playbook : playbooks/combined.yml
+
+---
 - name: install lamp server on ubuntu
   hosts: redhat
   become: yes
@@ -662,6 +673,12 @@ playbook : factsdemo.yml
         name: apache2
         state: restarted
 
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/combined.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/combined.yml
+* ansible-playbook -i inventory/hosts playbooks/combined.yml        
+
 ## METRIC BEATS INSTALLATION
 
  Manual steps (using apt package):
@@ -674,7 +691,7 @@ playbook : factsdemo.yml
 * sudo systemctl start metricbeat
 * sudo systemctl status metricbeat
  
-playbook : metricbeat.yml
+playbook : playbooks/metricbeat.yml
 
 ---
   - name: install metric-beat 
@@ -706,4 +723,10 @@ playbook : metricbeat.yml
           name: metricbeat
           enabled: yes    
           state: started 
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml          
      
