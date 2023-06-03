@@ -728,5 +728,102 @@ Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
-* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml          
+* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml  
+
+## NOPCOMMERCE INSTALLATION........(Azure 27 may class notes)
+
+ Manual steps (using apt package):
+
+ => Install dotnet core7
+
+    * wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+    * sudo dpkg -i packages-microsoft-prod.deb
+    * rm packages-microsoft-prod.deb
+
+ => Downloading nopcommerce zip
+
+    * sudo apt install unzip -y
+    * sudo mkdir /usr/share/nopCommerce
+    * cd /usr/share/nopCommerce/
+    * sudo wget https://github.com/nopSolutions/nopCommerce/releases/download/release-4.60.3/nopCommerce_4.60. 3_NoSource_linux_x64.zip
+    * sudo unzip nopCommerce_4.60.3_NoSource_linux_x64.zip
+    * sudo mkdir bin
+    * sudo mkdir logs
+
+ => Creating user nop and giving full permissions
+
+    * sudo adduser nop
+    * sudo vi /usr/share/nopCommerce
+    * sudo chgrp -R nop /usr/share/nopCommerce/
+    * sudo chown -R nop /usr/share/nopCommerce/
+
+
+
+=> Adding a service file
+
+   * sudo vi /etc/systemd/system/nopCommerce.service
+       [Unit]
+Description=Example nopCommerce app running on Xubuntu
+
+[Service]
+WorkingDirectory=/usr/share/nopCommerce
+ExecStart=/usr/bin/dotnet /usr/share/nopCommerce/Nop.Web.dll
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=nopCommerce-example
+User=nop
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://0.0.0.0:5000
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
+
+   * sudo systemctl enable nopCommerce.service
+   * sudo systemctl start nopCommerce.service
+   * sudo systemctl status nopCommerce.service
+
+* Expose the nopcommerce with the < public_ip:5000>
+
+ 
+playbook : playbooks/nop.yml
+
+---
+  - name: install metric-beat 
+    hosts: ubuntu
+    become: yes
+    tasks:
+      - name: update packages and install metric-beat   
+        ansible.builtin.apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: install apt-transport-https package
+        ansible.builtin.apt:
+          name: apt-transport-https
+          update_cache: yes
+          state: present                                                
+      - name: saving repo
+        ansible.builtin.apt_repository:
+          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+          filename: /etc/apt/sources.list.d/elastic-8.x.list
+          update_cache: yes
+          state: present
+      - name: update packages and install metricbeat
+        ansible.builtin.apt:
+          name: metricbeat
+          update_cache: yes
+          state: present
+      - name: enable metricbeat
+        ansible.builtin.systemd:
+          name: metricbeat
+          enabled: yes    
+          state: started 
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml
      
