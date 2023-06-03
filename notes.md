@@ -163,7 +163,7 @@ To enable password authentications edit config 'sudo /etc/ssh/sshd_config' and s
 ![Alt text](shots/25.PNG)
 
 * Adding inventory ('mkdir inventory') - Create a file named hosts ( 'vi inventory/hosts') with entry (public-IP of the node) (private-IP works when machines in same network)
-* Check connectivity by executing 'ansible -m ping -i inventory/hosts all'
+* Check connectivity by executing 'ansible -i inventory/hosts -m ping all'
 
 ![Alt text](shots/26.PNG)
 
@@ -210,24 +210,22 @@ Syntax : YAML format
   * mkdir playbooks
   * vi playbooks/hello.yml
 
- Playbook : playbooks/hello.yml
-   --- 
-- name: hello ansible
-  hosts: all
-  become: yes
-  tasks:
-    - name: update packages and install tree
-      apt:
-        name: tree
-        state: present
-        update_cache: yes
+ Playbook : playbooks/hello.yml :
+
+![Alt text](shots/39.PNG)
+![Alt text](shots/29.PNG)
 
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/hello.yml
-* ansible-playbook -i inventory/hosts --check playbooks/ubuntu.yml
-* ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/hello.yml
 * ansible-playbook -i inventory/hosts playbooks/hello.yml
+
+![Alt text](shots/30.PNG)
+
+Output on node machine :
+
+![Alt text](shots/31.PNG)
 
 ## WOW (Ways Of Working)
 
@@ -243,6 +241,9 @@ Commands to execute :
 * sudo apt install apache2 -y
 * Verify installation 'http://public-ip' 
 
+![Alt text](shots/32.PNG)
+![Alt text](shots/33.PNG)
+
 Playbook steps :
 
 * Complete the entire Ansible control node - node setup
@@ -252,27 +253,23 @@ Playbook steps :
 * create a directory and add a yaml file
   -> mkdir playbooks
   -> vi playbooks/apache2.yml
-* For writing playbook we first search for module as 'apt in ansible'
-* Now select parameters
 
- Playbook : playbooks/apache2.yml
----
-- name: install apache server
-  hosts: all
-  become: yes
-  tasks:
-    - name: install apache
-      ansible.builtin.apt:
-        name: apache2
-        update_cache: yes
-        state: present
+ Playbook : playbooks/apache2.yml :
+
+![Alt text](shots/38.PNG)
+![Alt text](shots/34.PNG)
 
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/apache2.yml
-* ansible-playbook -i inventory/hosts --check playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts playbooks/apache2.yml
+* Check status on the node 'sudo systemctl status apache2'
+* Expose using node Ipaddress
+
+![Alt text](shots/35.PNG)
+![Alt text](shots/36.PNG)
+![Alt text](shots/37.PNG)
 
 ## Sample-2 : Install LAMP server on ubuntu
    ( skipping mysql installation )
@@ -282,13 +279,19 @@ Commands to execute :
 * sudo apt update
 * sudo apt install apache2 -y
 * sudo apt install php libapache2-mod-php php-mysql -y
-[# Create a file called as /var/www/html/info.php with below content
-# <?php phpinfo(); ?>]
+ 
+ [# Create a file called as /var/www/html/info.php with below content
+#(?php phpinfo(); ?) ]
+
 * sudo -i
 * echo '<?php phpinfo(); ?>' > /var/www/html/info.php
 * exit
 * sudo systemctl restart apache2
 * Verify installation 'http://public-ip/info.php' 
+
+![Alt text](shots/40.PNG)
+![Alt text](shots/41.PNG)
+![Alt text](shots/42.PNG)
 
 Playbook steps :
 
@@ -298,11 +301,11 @@ Playbook steps :
   -> vi inventory/hosts
 * create a directory and add a yaml file
   -> mkdir playbooks
-  -> vi playbooks/apache2.yml
+  -> vi playbooks/lamp-ubuntu.yml
 * For writing playbook we first search for module as 'apt in ansible'
 * Now select parameters
 
- Playbook : playbooks/lamp/ubuntu.yml
+ Playbook : playbooks/lamp-ubuntu.yml
 ---
 - name: install lamp server on ubuntu
   hosts: all
@@ -329,16 +332,28 @@ Playbook steps :
         name: apache2
         state: restarted
 
-playbooks/lamp/info.php
+![Alt text](shots/46.PNG)
+
+playbook/info.php
 
 * <?php phpinfo(); ?>
 
+![Alt text](shots/45.PNG)
+
 Commands to execute :
 
-* ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
-* ansible-playbook -i inventory/hosts --check playbooks/ubuntu.yml
-* ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
-* ansible-playbook -i inventory/hosts playbooks/ubuntu.yml
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/lamp-ubuntu.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/lamp-ubuntu.yml
+* ansible-playbook -i inventory/hosts playbooks/lamp-ubuntu.yml
+
+![Alt text](shots/43.PNG)
+![Alt text](shots/44.PNG)
+
+* Check status on node and expose node IPaddress
+
+![Alt text](shots/47.PNG)
+![Alt text](shots/48.PNG)
+![Alt text](shots/49.PNG)
 
 ## Sample-3 : Install LAMP stack on Redhat9
    ( skipping mysql installation )
