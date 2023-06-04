@@ -356,36 +356,10 @@ Playbook steps :
 * create a directory and add a yaml file
   -> mkdir playbooks
   -> vi playbooks/lamp-redhat.yml
-* For writing playbook we first search for module as 'apt in ansible'
-* Now select parameters
 
  Playbook : playbooks/lamp-redhat.yml
----
-- name: install lamp server on redhat
-  hosts: all
-  become: yes
-  tasks:
-    - name: install apache server
-      ansible.builtin.yum:
-        name: httpd
-        state: present
-    - name: enable and start apache
-      ansible.builtin.systemd:
-        name: httpd
-        enabled: yes
-        state: started
-    - name: install apache server
-      ansible.builtin.yum:
-        name: php
-        state: present
-    - name: copy the info.php file
-      ansible.builtin.copy:
-        src: info.php
-        dest: /var/www/html/info.php
-    - name: restart apache
-      ansible.builtin.systemd:
-        name: httpd
-        state: restarted
+
+
 
 playbooks/info.php
 
@@ -443,42 +417,22 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts playbooks/redhat.yml
 
 E.g. : playbooks/ubuntu.yaml
----
-- name: install lamp server on ubuntu
-  hosts: all
-  become: yes
-  tasks:
-    - name: update packages and install apache
-      ansible.builtin.apt:
-        name: apache2
-        update_cache: yes
-        state: present
-    - name: install php packages
-      ansible.builtin.apt:
-        name:
-          - php
-          - libapache2-mod-php
-          - php-mysql
-        state: present
-      notify:
-        - restart apache2
-    - name: copy the info.php page
-      ansible.builtin.copy:
-        src: info.php
-        dest: /var/www/html/info.php
-      notify:
-        - restart apache2
-  handlers:
-    - name: restart apache2
-      ansible.builtin.systemd:
-        name: apache2
-        state: restarted
+
+![Alt text](shots/55.PNG)
 
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
-* ansible-playbook -i inventory/hosts playbooks/ubuntu.yml        
+* ansible-playbook -i inventory/hosts playbooks/ubuntu.yml   
+
+![Alt text](shots/56.PNG)
+![Alt text](shots/57.PNG)
+
+* Check the output using node IPaddress and also add /info.php and reload
+
+![Alt text](shots/58.PNG)
+![Alt text](shots/59.PNG)
 
 ## Inventory
 
@@ -730,7 +684,7 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
 * ansible-playbook -i inventory/hosts playbooks/metricbeat.yml  
 
-## NOPCOMMERCE INSTALLATION........(Azure 27 may class notes)
+## NOPCOMMERCE INSTALLATION
 
  Manual steps (using apt package):
 
@@ -739,8 +693,10 @@ Commands to execute :
     * wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
     * sudo dpkg -i packages-microsoft-prod.deb
     * rm packages-microsoft-prod.deb
+    * sudo apt-get update && \
+      sudo apt-get install -y dotnet-sdk-7.0
 
- => Downloading nopcommerce zip
+ => Downloading nopcommerce zip and unzip
 
     * sudo apt install unzip -y
     * sudo mkdir /usr/share/nopCommerce
@@ -749,77 +705,33 @@ Commands to execute :
     * sudo unzip nopCommerce_4.60.3_NoSource_linux_x64.zip
     * sudo mkdir bin
     * sudo mkdir logs
-
+    * cd ~
  => Creating user nop and giving full permissions
 
     * sudo adduser nop
-    * sudo vi /usr/share/nopCommerce
     * sudo chgrp -R nop /usr/share/nopCommerce/
     * sudo chown -R nop /usr/share/nopCommerce/
-
-
 
 => Adding a service file
 
    * sudo vi /etc/systemd/system/nopCommerce.service
-       [Unit]
-Description=Example nopCommerce app running on Xubuntu
-
-[Service]
-WorkingDirectory=/usr/share/nopCommerce
-ExecStart=/usr/bin/dotnet /usr/share/nopCommerce/Nop.Web.dll
-Restart=always
-# Restart service after 10 seconds if the dotnet service crashes:
-RestartSec=10
-KillSignal=SIGINT
-SyslogIdentifier=nopCommerce-example
-User=nop
-Environment=ASPNETCORE_ENVIRONMENT=Production
-Environment=ASPNETCORE_URLS=http://0.0.0.0:5000
-Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
-
-[Install]
-WantedBy=multi-user.target
+       
+  ![Alt text](shots/51.PNG)
 
    * sudo systemctl enable nopCommerce.service
    * sudo systemctl start nopCommerce.service
    * sudo systemctl status nopCommerce.service
 
+  ![Alt text](shots/52.PNG)
+  ![Alt text](shots/53.PNG)
+
 * Expose the nopcommerce with the < public_ip:5000>
 
+  ![Alt text](shots/54.PNG)
  
 playbook : playbooks/nop.yml
 
----
-  - name: install metric-beat 
-    hosts: ubuntu
-    become: yes
-    tasks:
-      - name: update packages and install metric-beat   
-        ansible.builtin.apt_key:
-          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-          state: present
-      - name: install apt-transport-https package
-        ansible.builtin.apt:
-          name: apt-transport-https
-          update_cache: yes
-          state: present                                                
-      - name: saving repo
-        ansible.builtin.apt_repository:
-          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
-          filename: /etc/apt/sources.list.d/elastic-8.x.list
-          update_cache: yes
-          state: present
-      - name: update packages and install metricbeat
-        ansible.builtin.apt:
-          name: metricbeat
-          update_cache: yes
-          state: present
-      - name: enable metricbeat
-        ansible.builtin.systemd:
-          name: metricbeat
-          enabled: yes    
-          state: started 
+  
 
 Commands to execute :
 
