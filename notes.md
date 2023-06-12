@@ -359,7 +359,7 @@ Playbook steps :
 
  Playbook : playbooks/lamp-redhat.yml
 
-
+![Alt text](shots/60.PNG)
 
 playbooks/info.php
 
@@ -370,6 +370,60 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/lamp-redhat.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/lamp-redhat.yml
 * ansible-playbook -i inventory/hosts playbooks/lamp-redhat.yml
+
+
+## METRIC BEATS INSTALLATION
+
+ Manual steps (using apt package):
+       
+* wget -q0 – https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+* sudo apt-get install apt-transport-https
+* echo “deb https://artifacts.elastic.co/packages/8.x/apt stable main” | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
+* sudo apt-get update && sudo apt-get install metricbeat
+* sudo systemctl enable metricbeat
+* sudo systemctl start metricbeat
+* sudo systemctl status metricbeat
+ 
+playbook : playbooks/metricbeat.yml
+
+---
+  - name: install metric-beat 
+    hosts: ubuntu
+    become: yes
+    tasks:
+      - name: update packages and install metric-beat   
+        ansible.builtin.apt_key:
+          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+          state: present
+      - name: install apt-transport-https package
+        ansible.builtin.apt:
+          name: apt-transport-https
+          update_cache: yes
+          state: present                                                
+      - name: saving repo
+        ansible.builtin.apt_repository:
+          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+          filename: /etc/apt/sources.list.d/elastic-8.x.list
+          update_cache: yes
+          state: present
+      - name: update packages and install metricbeat
+        ansible.builtin.apt:
+          name: metricbeat
+          update_cache: yes
+          state: present
+      - name: enable metricbeat
+        ansible.builtin.systemd:
+          name: metricbeat
+          enabled: yes    
+          state: started 
+
+![Alt text](shots/61.PNG)
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml  
 
 ## Handlers
 
@@ -633,57 +687,6 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/combined.yml
 * ansible-playbook -i inventory/hosts playbooks/combined.yml        
 
-## METRIC BEATS INSTALLATION
-
- Manual steps (using apt package):
-       
-* wget -q0 – https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-* sudo apt-get install apt-transport-https
-* echo “deb https://artifacts.elastic.co/packages/8.x/apt stable main” | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
-* sudo apt-get update && sudo apt-get install metricbeat
-* sudo systemctl enable metricbeat
-* sudo systemctl start metricbeat
-* sudo systemctl status metricbeat
- 
-playbook : playbooks/metricbeat.yml
-
----
-  - name: install metric-beat 
-    hosts: ubuntu
-    become: yes
-    tasks:
-      - name: update packages and install metric-beat   
-        ansible.builtin.apt_key:
-          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-          state: present
-      - name: install apt-transport-https package
-        ansible.builtin.apt:
-          name: apt-transport-https
-          update_cache: yes
-          state: present                                                
-      - name: saving repo
-        ansible.builtin.apt_repository:
-          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
-          filename: /etc/apt/sources.list.d/elastic-8.x.list
-          update_cache: yes
-          state: present
-      - name: update packages and install metricbeat
-        ansible.builtin.apt:
-          name: metricbeat
-          update_cache: yes
-          state: present
-      - name: enable metricbeat
-        ansible.builtin.systemd:
-          name: metricbeat
-          enabled: yes    
-          state: started 
-
-Commands to execute :
-
-* ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
-* ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
-* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml  
-
 ## NOPCOMMERCE INSTALLATION
 
  Manual steps (using apt package):
@@ -731,11 +734,36 @@ Commands to execute :
  
 playbook : playbooks/nop.yml
 
-  
+![Alt text](shots/62.PNG)
+![Alt text](shots/63.PNG)
+![Alt text](shots/64.PNG)
 
 Commands to execute :
 
-* ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
-* ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
-* ansible-playbook -i inventory/hosts playbooks/metricbeat.yml
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/nop.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/nop.yml
+* ansible-playbook -i inventory/hosts playbooks/nop.yml
+
+## OPEN-MRS INSTALLATION
+
+=> URL : https://www.linuxcloudvps.com/blog/how-to-install-openmrs-on-ubuntu-20-04/
+
+ Manual steps (using apt package): ( skipping mysql installation)
+
+=> Installing tomcat7
+
+
+
+ 
+playbook : playbooks/openmrs.yml
+
+
+
+
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/openmrs.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/openmrs.yml
+* ansible-playbook -i inventory/hosts playbooks/openmrs.yml
      

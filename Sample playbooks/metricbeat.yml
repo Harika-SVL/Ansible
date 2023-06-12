@@ -1,0 +1,33 @@
+## To install metricbeat in ansible 
+---
+- name: installing metricbeat
+  hosts: all
+  become: true
+  tasks:
+    - name: metricbeat install
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+    - name: installing trasport https
+      ansible.builtin.apt:
+        name: apt-transport-https
+        update_cache: yes
+        state: present
+    - name: Save the repository definition to path
+      ansible.builtin.shell:
+        cmd: echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee -a 
+             /etc/apt/sources.list.d/elastic-8.x.list
+    - name: Save the repository definition to path
+      ansible.builtin.shell:
+        cmd: echo "deb https://artifacts.elastic.co/packages/oss-8.x/apt stable main" | sudo tee -a 
+            /etc/apt/sources.list.d/elastic-8.x.list
+    - name: installing metricbeat
+      ansible.builtin.apt:
+        name: metricbeat
+        update_cache: yes
+        state: present
+    - name: enable metricbeat
+      ansible.builtin.service:
+        name: metricbeat
+        enabled: true
+        state: started

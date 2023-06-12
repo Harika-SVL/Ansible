@@ -1,0 +1,11 @@
+---
+- name: exploring facts
+  become: false
+  hosts: all
+  tasks:
+    - name: print os details
+      ansible.builtin.debug:
+        var: ansible_default_ipv4
+    - name: same info
+      ansible.builtin.debug:
+        var: ansible_facts['default_ipv4']

@@ -1,0 +1,9 @@
+---
+- name: exploring facts
+  become: false
+  hosts: all
+  tasks:
+    - name: print os details
+      ansible.builtin.debug:
+        msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
+

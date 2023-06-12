@@ -1,0 +1,9 @@
+---
+- name: install mysql using role
+  hosts: mysql
+  become: yes
+  roles:
+    - geerlingguy.mysql
+  vars:
+    mysql_bind_address: 0.0.0.0
+    mysql_root_password: nop123
