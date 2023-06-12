@@ -1,0 +1,10 @@
+---
+- name: install java-17 on ubuntu 22.04
+  hosts: all
+  become: yes
+  tasks:
+    - name: update packages and install java-17
+      ansible.builtin.apt:
+        name: openjdk-17-jdk
+        update_cache: yes
+        state: present
