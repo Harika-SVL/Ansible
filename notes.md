@@ -127,17 +127,17 @@ To enable password authentications edit config 'sudo vi /etc/ssh/sshd_config' an
 
 => Now need to restart the service, 'sudo service sshd restart'
 
-* Create a service account/user('sudo adduser devops') in all machines with sudo permissions('sudo visudo') (This is to be done in both the machines)
+* Create a service account/user('sudo adduser devops') in all machines with sudo permissions('sudo visudo') (This is to be done on both the machines)
 
 ![Alt text](shots/17.PNG)
 ![Alt text](shots/18.PNG)
 
-[ Note : Login into both the machines as devops user using 'ssh devops@< same machine IPaddress >']
+[ Note : Login into both the machines as devops user using 'ssh devops@< same machine public_IPaddress >']
 
 ![Alt text](shots/19.PNG)
 ![Alt text](shots/20.PNG)
 
-[ Optional: as both machines are in the same network we can also use private ipaddress of other machine to connect instead of public ipaddress ]
+[ Optional: as both machines are in the same network we can also use private_IPaddress of other machine to connect instead of public_IPaddress ]
 
 * Install Ansible on the control node using commands only on the control node :
 
@@ -145,14 +145,13 @@ To enable password authentications edit config 'sudo vi /etc/ssh/sshd_config' an
 -> sudo apt install software-properties-common -y
 -> sudo add-apt-repository --yes --update ppa:ansible/ansible
 -> sudo apt install ansible -y
-
-* Verify ansible version ('ansible --version')
+-> ansible --version
 
 ![Alt text](shots/21.PNG)
 
 [ Optional: Disable password based authentication ]
 
-* Create a keypair using 'ssh-keygen' and copy the ssh-key to the node(private ip also works) machine using 'ssh-copy-id devops@< other machine IPaddress >'
+* Create a keypair using 'ssh-keygen' and copy the ssh-key to the node(private_ip also works) machine using 'ssh-copy-id devops@< node machine public_IPaddress >'
 
 ![Alt text](shots/22.PNG)
 ![Alt text](shots/23.PNG)
