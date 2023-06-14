@@ -1,0 +1,11 @@
+[Unit]
+Description=Installing Broadleaf Commerce
+
+[Service]
+User=devops
+WorkingDirectory=/DemoSite/site
+ExecStart=<script which needs to be executed>
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
