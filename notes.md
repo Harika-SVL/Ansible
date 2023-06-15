@@ -385,37 +385,6 @@ Commands to execute :
  
 playbook : playbooks/metricbeat.yml
 
----
-  - name: install metric-beat 
-    hosts: ubuntu
-    become: yes
-    tasks:
-      - name: update packages and install metric-beat   
-        ansible.builtin.apt_key:
-          url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
-          state: present
-      - name: install apt-transport-https package
-        ansible.builtin.apt:
-          name: apt-transport-https
-          update_cache: yes
-          state: present                                                
-      - name: saving repo
-        ansible.builtin.apt_repository:
-          repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
-          filename: /etc/apt/sources.list.d/elastic-8.x.list
-          update_cache: yes
-          state: present
-      - name: update packages and install metricbeat
-        ansible.builtin.apt:
-          name: metricbeat
-          update_cache: yes
-          state: present
-      - name: enable metricbeat
-        ansible.builtin.systemd:
-          name: metricbeat
-          enabled: yes    
-          state: started 
-
 ![Alt text](shots/61.PNG)
 
 Commands to execute :
@@ -550,14 +519,8 @@ E.g : YAML format - hosts.yml
 
 playbook : playbooks/distribution.yml
 
----
-- name: exploring facts
-  become: no
-  hosts: all
-  tasks:
-    - name: print os details
-      ansible.builtin.debug:
-        msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
+![Alt text](shots/83.PNG)
+![Alt text](shots/85.PNG)
 
 * The statement ansible_facts['os_family'] represents accessing os family from the facts collected
 * From facts the variables can be accessed with full names ansible_default_ipv4 or ansible_facts['default_ipv4']
@@ -568,22 +531,13 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/distribution.yml
 * ansible-playbook -i inventory/hosts playbooks/distribution.yml        
 
-
+![Alt text](shots/84.PNG)
 
 
 playbook : playbooks/ipv4.yml
 
----
-- name: exploring facts
-  become: no
-  hosts: all
-  tasks:
-    - name: print os details
-      ansible.builtin.debug:
-        var: ansible_default_ipv4
-    - name: same info
-      ansible.builtin.debug:
-        var: ansible_facts['default_ipv4']
+![Alt text](shots/86.PNG)
+![Alt text](shots/87.PNG)
 
 Commands to execute :
 
@@ -591,6 +545,8 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/ipv4.yml
 * ansible-playbook -i inventory/hosts playbooks/ipv4.yml        
 
+![Alt text](shots/88.PNG)
+![Alt text](shots/89.PNG)
 
 ## Conditionals
 
@@ -599,14 +555,8 @@ Commands to execute :
 
 playbook : playbooks/factsdemo.yml
 
----
-- name: exploring facts
-  become: no
-  hosts: all
-  tasks:
-    - name: print os details
-      ansible.builtin.debug:
-        msg: "family: {{ ansible_facts['os_family'] }} distribution: {{ ansible_facts['distribution'] }}"
+![Alt text](shots/90.PNG)
+![Alt text](shots/91.PNG)
 
 Commands to execute :
 
@@ -614,6 +564,7 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/factsdemo.yml
 * ansible-playbook -i inventory/hosts playbooks/factsdemo.yml        
 
+![Alt text](shots/92.PNG)
 
 playbook : playbooks/combined.yml
 

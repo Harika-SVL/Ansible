@@ -1,5 +1,5 @@
 ---
-- name: install lamp server on ubuntu
+- name: install lamp server on redhat/ubuntu
   hosts: redhat
   become: true
   tasks:

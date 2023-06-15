@@ -3,8 +3,9 @@ Description=Installing Broadleaf Commerce
 
 [Service]
 User=devops
-WorkingDirectory=/DemoSite/site
-ExecStart=<script which needs to be executed>
+Type=simple
+WorkingDirectory=/home/devops/DemoSite/site
+ExecStart=mvn spring-boot:run
 Restart=always
 
 [Install]

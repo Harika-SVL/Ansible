@@ -1,18 +1,18 @@
 ---
   - name: Installing Broadleaf Commerce
-    hosts: ubuntu
-    become: true
+    hosts: Ubuntu
+    become: yes
     tasks:
       - name: Clonning repo from git
         ansible.builtin.git:
-          repo: 'https://github.com/BroadleafCommerce/DemoSite.git'
+          repo: https://github.com/BroadleafCommerce/DemoSite.git
           dest: /DemoSite
-          clone: true
-          update: false
+          clone: yes
+          update: no
       - name: Installing maven
         ansible.builtin.apt:
           name: maven
-          update_cache: true
+          update_cache: yes
           state: present
       - name: Create directory if doesn't exist
         ansible.builtin.file:
@@ -20,12 +20,13 @@
           state: directory
       - name: Running command 
         ansible.builtin.shell:
-          cmd: mvn clean install
+          cmd: cd /DemoSite && mvn clean install
       - name: Create a directory if doesn't exist
         ansible.builtin.file:
           path: /DemoSite/site
           state: directory
-      - name: Running command 
-        ansible.builtin.shell:
-          cmd: mvn spring-boot:run
+      - name: Copying the service file to run the service
+        ansible.builtin.copy:
+          src: broadleaf.service
+          dest: /DemoSite/site/broadleaf.service
           
