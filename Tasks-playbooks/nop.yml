@@ -22,7 +22,7 @@
         state: present
     - name: Add the user 'nopCommerce' with a primary group of 'nopCommerce'
       ansible.builtin.user:
-        name: nopCommerce
+        name: nop
     - name: Create a directory if it does not exist
       ansible.builtin.file:
         path: /var/www/nopCommerce
@@ -39,11 +39,11 @@
     - name: Change file ownership, group and permissions
       ansible.builtin.file:
         path: /var/www/nopCommerce
-        owner: nopCommerce
-        group: nopCommerce
+        owner: nop
+        group: nop
         mode: '0777'
         state: directory
-        recurse: true
+        recurse: yes
     - name: Create two directories bin and logs if it does not exist
       ansible.builtin.file:
         path: 
@@ -52,10 +52,10 @@
         state: directory
     - name: Copy nop service file to nopcommerce path
       ansible.builtin.copy:
-        src: nopCommerce.service
-        dest: /etc/systemd/system/nopCommerce.service
+        src: nop.service
+        dest: /etc/systemd/system/nop.service
     - name: Start service nopCommerce, if not started
       ansible.builtin.service:
-        name: nopCommerce
-        enabled: true
+        name: nop
+        enabled: yes
         state: started

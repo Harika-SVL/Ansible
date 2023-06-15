@@ -1,4 +1,3 @@
-## To install metricbeat in ansible 
 ---
 - name: installing metricbeat
   hosts: all

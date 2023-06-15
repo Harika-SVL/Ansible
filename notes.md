@@ -393,6 +393,9 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
 * ansible-playbook -i inventory/hosts playbooks/metricbeat.yml  
 
+![Alt text](shots/93.PNG)
+![Alt text](shots/94.PNG)
+
 ## Handlers
 
 * Sometimes you want a task to run only when a change is made on a machine. 
@@ -688,11 +691,22 @@ playbook : playbooks/nop.yml
 ![Alt text](shots/63.PNG)
 ![Alt text](shots/64.PNG)
 
+service-file : playbooks/nop.service
+
+![Alt text](shots/97.PNG)
+
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/nop.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/nop.yml
 * ansible-playbook -i inventory/hosts playbooks/nop.yml
+
+![Alt text](shots/95.PNG)
+![Alt text](shots/96.PNG)
+
+* Expose the '< public_IPaddress of node >:5000'
+
+![Alt text](shots/98.PNG)
 
 ## OPEN-MRS INSTALLATION
 
@@ -716,4 +730,39 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/openmrs.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/openmrs.yml
 * ansible-playbook -i inventory/hosts playbooks/openmrs.yml
+     
+## BROADLEAF INSTALLATION
+
+ Manual steps (using apt package):
+
+ 
+
+ 
+
+
+
+
+
+* Expose the broadleaf with the '< public_IPaddress>:8080'
+
+
+ 
+playbook : playbooks/broadleaf.yml
+
+
+
+
+
+service-file : playbooks/broadleaf.service
+
+
+
+Commands to execute :
+
+* ansible-playbook -i inventory/hosts --syntax-check playbooks/broadleaf.yml
+* ansible-playbook -i inventory/hosts --list-hosts playbooks/broadleaf.yml
+* ansible-playbook -i inventory/hosts playbooks/broadleaf.yml
+
+* Expose the '< public_IPaddress of node >:8080'
+
      
