@@ -405,7 +405,7 @@ Commands to execute :
 * For example, you may want to restart a service if a task updates the configuration of that service, but not if the configuration is unchanged.Ansible uses handlers to address this use case. 
 * Handlers are tasks that only run when notified.
 
-E.g. : playbooks/redhat.yaml
+### E.g.1 : playbooks/redhat.yaml
 ---
 - name: install lamp server on redhat
   hosts: all
@@ -444,7 +444,7 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/redhat.yml
 * ansible-playbook -i inventory/hosts playbooks/redhat.yml
 
-E.g. : playbooks/ubuntu.yaml
+### E.g.2 : playbooks/ubuntu.yaml
 
 ![Alt text](shots/55.PNG)
 
@@ -717,12 +717,60 @@ Commands to execute :
 
  Manual steps (using apt package): ( skipping mysql installation)
 
+ * Switch as root user
+ * apt-get update -y
+
+ => Install Java 8
+
+* apt-get install openjdk-8-jdk -y
+* java -version
+
+![Alt text](shots/101.PNG)
+![Alt text](shots/102.PNG)
+
 => Installing tomcat7
 
+* groupadd tomcat
+useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
+* wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
+* mkdir /opt/tomcat
+tar -xvzf apache-tomcat-7.0.109.tar.gz -C /opt/tomcat/ --strip-components=1
+* cd /opt/tomcat
+chgrp -R tomcat /opt/tomcat
+chmod -R g+r conf
+chmod g+x conf
+chown -R tomcat webapps/ work/ temp/ logs/
 
+=> Create a Systemd Service File for Tomcat
 
- 
-playbook : playbooks/openmrs.yml
+* nano /etc/systemd/system/tomcat.service
+
+![Alt text](shots/103.PNG)
+
+* systemctl daemon-reload
+* systemctl start tomcat
+* systemctl status tomcat
+
+![Alt text](shots/104.PNG)
+
+* At this point, Tomcat is started and listens on port 8080
+
+![Alt text](shots/105.PNG)
+
+=> Install OpenMRS
+
+* mkdir /var/lib/OpenMRS
+chown -R tomcat:tomcat /var/lib/OpenMRS
+* wget https://sourceforge.net/projects/openmrs/files/releases/OpenMRS_Platform_2.5.0/openmrs.war
+* cp openmrs.war /opt/tomcat/webapps/
+* chown -R tomcat:tomcat /opt/tomcat/webapps/openmrs.war
+* Access OpenMRS using : 'http://your-server-ip:8080/openmrs'
+
+![Alt text](shots/106.PNG)
+![Alt text](shots/107.PNG)
+
+ playbook : playbooks/openmrs.yml
+
 
 
 
@@ -740,18 +788,30 @@ Commands to execute :
 
  Manual steps (using apt package):
 
- 
+* sudo apt update
+* git clone https://github.com/BroadleafCommerce/DemoSite.git
 
- 
+![Alt text](shots/108.PNG)
 
+* sudo -i
+* apt install maven -y
+* mvn -version
+* exit
 
+![Alt text](shots/109.PNG)
 
+* cd DemoSite/
+* mvn clean install
+* cd site/
+* mvn spring-boot:run
 
+![Alt text](shots/112.PNG)
 
 * Expose the broadleaf with the '< public_IPaddress>:8080'
 
+![Alt text](shots/110.PNG)
+![Alt text](shots/111.PNG)
 
- 
 playbook : playbooks/broadleaf.yml
 
 

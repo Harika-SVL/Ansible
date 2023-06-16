@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   tasks:
-    - name: install java-17  ## install java 
+    - name: install java-8   
       ansible.builtin.apt:
         name: openjdk-8-jdk
         update_cache: yes
@@ -21,7 +21,7 @@
         group: tomcat
         home: /opt/tomcat
         shell: /bin/false
-    - name: Download tomcat tar file # install tomcat
+    - name: Download tomcat7 tar file 
       ansible.builtin.get_url:
         url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
         dest: "/tmp/apache-tomcat-7.0.109.tar.gz"
