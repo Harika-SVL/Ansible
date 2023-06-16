@@ -383,6 +383,9 @@ Commands to execute :
 * sudo systemctl start metricbeat
 * sudo systemctl status metricbeat
  
+![Alt text](shots/93.PNG)
+![Alt text](shots/94.PNG)
+
 playbook : playbooks/metricbeat.yml
 
 ![Alt text](shots/61.PNG)
@@ -733,6 +736,8 @@ Commands to execute :
      
 ## BROADLEAF INSTALLATION
 
+=> URL :  https://github.com/BroadleafCommerce
+
  Manual steps (using apt package):
 
  
@@ -765,4 +770,19 @@ Commands to execute :
 
 * Expose the '< public_IPaddress of node >:8080'
 
-     
+## VARIABLES
+
+* Ansible uses variables to manage differences between systems. 
+* With Ansible, you can execute tasks and playbooks on multiple different systems with a single command. 
+* To represent the variations among those different systems, you can create variables with standard YAML syntax, including lists and dictionaries. 
+* You can define these variables in your playbooks, in your inventory, in re-usable files or roles, or at the command line. 
+* Not all strings are valid Ansible variable names. A variable name can only include letters, numbers, and underscores.
+
+=> Let's take example of the 'combined.yml' file
+
+1. Add variables one in inventory and other in playbook
+
+2. Using packaging module (Generic package manager) instead of using apt/yum packages for apache
+
+## LOOPS IN ANSIBLE
+
