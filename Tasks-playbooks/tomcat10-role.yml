@@ -1,6 +1,0 @@
----
-- name: install tomcat10 using role
-  hosts: tomcat
-  become: yes
-  roles:
-    - tomcat10

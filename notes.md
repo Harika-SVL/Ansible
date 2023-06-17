@@ -406,37 +406,8 @@ Commands to execute :
 * Handlers are tasks that only run when notified.
 
 ### E.g.1 : playbooks/redhat.yaml
----
-- name: install lamp server on redhat
-  hosts: all
-  become: yes
-  tasks:
-    - name: install apache server
-      ansible.builtin.yum:
-        name: httpd
-        state: present
-    - name: enable and start apache
-      ansible.builtin.systemd:
-        name: httpd
-        enabled: yes
-        state: started
-    - name: install apache server
-      ansible.builtin.yum:
-        name: php
-        state: present
-      notify:
-        - restart apache
-    - name: copy the info.php file
-      ansible.builtin.copy:
-        src: info.php
-        dest: /var/www/html/info.php
-      notify:
-        - restart apache
-  handlers:
-    - name: restart apache
-      ansible.builtin.systemd:
-        name: httpd
-        state: restarted
+
+
 
 Commands to execute :
 
@@ -839,9 +810,12 @@ Commands to execute :
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/broadleaf.yml
 * ansible-playbook -i inventory/hosts playbooks/broadleaf.yml
 
+![Alt text](shots/125.PNG)
 
 
 * Expose the '< public_IPaddress of node >:8080'
+
+
 
 ## VARIABLES
 
