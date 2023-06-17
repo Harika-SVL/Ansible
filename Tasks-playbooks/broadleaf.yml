@@ -29,4 +29,14 @@
         ansible.builtin.copy:
           src: broadleaf.service
           dest: /DemoSite/site/broadleaf.service
+      - name: coping service using jinja2
+        ansible.builtin.template:
+          src: templates/broadleaf.service.j2
+          dest: /DemoSite/site/broadleaf.service
+        notify:
+          - restart broadleaf
+    handlers:
+    - name: restart broadleaf
+      ansible.builtin.systemd:
+        name: broadleaf
           

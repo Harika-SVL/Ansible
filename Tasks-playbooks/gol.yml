@@ -1,0 +1,29 @@
+---
+ - name: Installing Game of Life
+   hosts: Ubuntu
+   become: yes
+   tasks:
+     - name: Updating packages and Installing Java,Tomcat9
+       ansible.builtin.apt:
+          name: updating packages to latest
+           update_cache: yes
+           state: present
+          name: openjdk-8-jdk
+           update_cache: yes
+           state: present
+          name:  tomcat9
+           update_cache: yes
+           state: present      
+     - name: Create a directory if it does not exist
+       ansible.builtin.file:
+       path: /tmp
+       state: directory
+       mode: '0777' 
+     - name: Download war file from a file path
+       ansible.builtin.get_url:
+       url: wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/gameoflife.war
+       dest: /gameoflife.
+     - name: Copy war file to destination
+       ansible.builtin.copy:
+       src: /gameoflife.war
+       dest: /var/lib/tomcat9/webapps/gameoflife.war

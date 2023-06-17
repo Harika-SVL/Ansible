@@ -814,19 +814,20 @@ Commands to execute :
 
 playbook : playbooks/broadleaf.yml
 
+![Alt text](shots/113.PNG)
+![Alt text](shots/114.PNG)
 
+Jinja-service-file : playbooks/broadleaf.service.j2
 
-
-
-service-file : playbooks/broadleaf.service
-
-
+![Alt text](shots/115.PNG)
 
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/broadleaf.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/broadleaf.yml
 * ansible-playbook -i inventory/hosts playbooks/broadleaf.yml
+
+
 
 * Expose the '< public_IPaddress of node >:8080'
 
