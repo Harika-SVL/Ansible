@@ -771,16 +771,28 @@ chown -R tomcat:tomcat /var/lib/OpenMRS
 
  playbook : playbooks/openmrs.yml
 
+![Alt text](shots/118.PNG)
+![Alt text](shots/119.PNG)
+![Alt text](shots/120.PNG)
+![Alt text](shots/121.PNG)
 
+ service-file : playbooks/tomcat.service
 
-
-
+![Alt text](shots/122.PNG)
 
 Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/openmrs.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/openmrs.yml
 * ansible-playbook -i inventory/hosts playbooks/openmrs.yml
+
+![Alt text](shots/116.PNG)
+![Alt text](shots/117.PNG)
+
+* Expose the application '<public_IPaddress:8080>'
+
+![Alt text](shots/123.PNG)
+
      
 ## BROADLEAF INSTALLATION
 
