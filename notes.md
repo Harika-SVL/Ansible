@@ -827,9 +827,49 @@ Commands to execute :
 
 => Let's take example of the 'combined.yml' file
 
-1. Add variables one in inventory and other in playbook
+1. Add variables in inventory and other in playbook
+
+![Alt text](shots/126.PNG)
+![Alt text](shots/127.PNG)
+![Alt text](shots/128.PNG)
+
+## ansible.builtin.package module – Generic OS package manager
+
+* In most cases, you can use the short module name package even without specifying the collections: keyword. 
 
 2. Using packaging module (Generic package manager) instead of using apt/yum packages for apache
 
-## LOOPS IN ANSIBLE
+* Using package instead of apt/yum for installing apache
 
+![Alt text](shots/129.PNG)
+![Alt text](shots/130.PNG)
+
+## Loops
+
+* Ansible offers the loop, with_<lookup>, and until keywords to execute a task multiple times. 
+* Examples of commonly-used loops include changing ownership on several files and/or directories with the file module, creating multiple users with the user module, and repeating a polling step until a certain result is reached.
+
+3. with loops and using loops from variables
+
+![Alt text](shots/131.PNG)
+![Alt text](shots/132.PNG)
+![Alt text](shots/133.PNG)
+
+=> Variables at the inventory level need not be in inventory file
+
+4. with host_vars and group_vars
+
+![Alt text](shots/134.PNG)
+![Alt text](shots/135.PNG)
+![Alt text](shots/136.PNG)
+![Alt text](shots/137.PNG)
+![Alt text](shots/138.PNG)
+
+5.  to fail playbook explicitly on unsupported os
+
+![Alt text](shots/139.PNG)
+
+6. Debug messages
+
+![Alt text](shots/140.PNG)
+![Alt text](shots/141.PNG)
