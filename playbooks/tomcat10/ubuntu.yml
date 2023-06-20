@@ -1,0 +1,107 @@
+---
+- name: install tomcat
+  hosts: tomcat
+  become: yes
+  tasks:
+    - name: check if the playbook is being executed on supported os
+      ansible.builtin.fail:
+        msg: "This playbook is designed to work on ubuntu only"
+      when: ansible_facts['distribution'] != "Ubuntu" 
+    - name: install java
+      ansible.builtin.apt:
+        name: "{{ java_package }}"
+        update_cache: yes
+        state: present
+    - name: create group
+      ansible.builtin.group:
+        name: "{{ group }}"
+        state: present
+    - name: create user
+      ansible.builtin.user:
+        name: "{{ user }}"
+        create_home: yes
+        home: "{{ homedir }}"
+        shell: "{{ shell }}"
+        group: "{{ group }}"  
+    - name: download tomcat
+      ansible.builtin.get_url:
+        url: "https://www-eu.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"  
+        dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+    - name: find if the tomcat is already extracted
+      ansible.builtin.stat:
+        path: "{{ homedir }}/apache-tomcat-{{ tomcat_version }}/LICENSE"
+      register: license_info
+    - name: extract tomcat
+      ansible.builtin.unarchive:
+        src: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "{{ homedir }}"
+        remote_src: yes  
+      when: not license_info.stat.exists
+    - name: create a symlink
+      ansible.builtin.file:
+        src: "{{ homedir }}/apache-tomcat-{{ tomcat_version }}"
+        dest: "{{ homedir }}/latest"
+        state: link
+      notify:
+        - Recursively change ownership of a directory
+        - Add execute permissions for shell scripts
+    - name: Flush handlers
+      meta: flush_handlers  
+    - name: copy the service file
+      ansible.builtin.template:
+        src: tomcat.service.j2
+        dest: /etc/systemd/system/tomcat.service
+      notify:
+        - reload daemon
+    - name: ensure tomcat is enable and runing
+      ansible.builtin.systemd:
+        name: tomcat
+        enabled: yes
+        state: started
+    - name: configure the tomcat users xml
+      ansible.builtin.template:
+        src: tomcat-users.xml.j2
+        dest: "{{ homedir }}/latest/conf/tomcat-users.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - restart tomcat
+    - name: allow all for manager app
+      ansible.builtin.template:
+        src: context.xml.j2
+        dest: "{{ homedir }}/latest/webapps/manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - restart tomcat
+    - name: allow all for hostmanager app
+      ansible.builtin.template:
+        src: context.xml.j2
+        dest: "{{ homedir }}/latest/webapps/host-manager/META-INF/context.xml"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+      notify:
+        - restart tomcat
+      handlers:
+        - name: reload daemon
+          ansible.builtin.systemd:
+          daemon_reload: yes
+    - name: Recursively change ownership of a directory
+      ansible.builtin.file:
+        path: "{{ homedir }}"
+        state: directory
+        recurse: yes
+        owner: "{{ user }}"
+        group: "{{ group }}"
+    - name: Add execute permissions for shell scripts
+      ansible.builtin.shell:
+        cmd: "chmod +x {{ homedir }}/latest/bin/*.sh"
+    - name: restart tomcat
+      ansible.builtin.systemd:
+        name: tomcat
+        state: restarted
+    
+    
+    
+    
+    

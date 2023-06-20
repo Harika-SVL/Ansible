@@ -873,3 +873,122 @@ Commands to execute :
 
 ![Alt text](shots/140.PNG)
 ![Alt text](shots/141.PNG)
+
+## Installing Tomcat without using package manager
+    ( refer here : https://linuxize.com/post/how-to-install-tomcat-10-on-ubuntu-22-04/ )
+
+=> Manual steps :
+
+* sudo apt update
+* sudo apt install openjdk-11-jdk
+* java -version
+* sudo useradd -m -U -d /opt/tomcat -s /bin/false tomcat
+* VERSION=10.1.4
+* wget https://www-eu.apache.org/dist/tomcat/tomcat-10/v${VERSION}/bin/apache-tomcat-${VERSION}.tar.gz -P /tmp
+* sudo tar -xf /tmp/apache-tomcat-${VERSION}.tar.gz -C /opt/tomcat/
+* sudo ln -s /opt/tomcat/apache-tomcat-${VERSION} /opt/tomcat/latest
+* sudo chown -R tomcat: /opt/tomcat
+* sudo sh -c 'chmod =x /opt/tomcat/bin/*.sh'
+*sudo nano /etc/systemd/system/tomcat.service
+ 
+ service-file : tomcat.service
+
+ ![Alt text](shots/142.PNG)
+
+ * sudo systemctl daemon-reload
+ * sudo systemctl enable --now tomcat
+ * sudo systemctl start tomcat
+ * sudo systemctl status tomcat
+
+ * Expose the page on '<http://public_IPaddress>:8080'
+ 
+ ![Alt text](shots/143.PNG)
+
+## Writing Playbook in stages
+
+1. Installing java-11
+
+![Alt text](shots/144.PNG)
+![Alt text](shots/145.PNG)
+![Alt text](shots/146.PNG)
+
+* For the further steps we need to use sudo instead we add 'become: yes' at the task level itself
+
+![Alt text](shots/147.PNG)
+
+2. Adding user and creating a group
+
+![Alt text](shots/148.PNG)
+![Alt text](shots/149.PNG)
+
+3. Downloading tomcat in a temporary directory
+
+* Here if we want the next tomcat versions also to work over , we add the tomcat_major_version and also in url
+
+![Alt text](shots/150.PNG)
+
+* url: "https://www-eu.apache.org/dist/tomcat/tomcat-{{ tomcat_major_version }}/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"
+* dest: "/tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"
+
+![Alt text](shots/151.PNG)
+
+4. Extract tomcat
+
+![Alt text](shots/152.PNG)
+
+5. Create a symlink
+
+![Alt text](shots/153.PNG)
+
+6. change the home directory ownership
+
+![Alt text](shots/154.PNG)
+
+7. Lets directly run the linux command form ansible ( not idempodent )
+
+![Alt text](shots/155.PNG)
+
+8. We need to create a service file but it has dynamic content, so copying static file is not an option, Ansible has templating
+
+ * for expressions we use jinja templates ( using this presently )
+ * for module we use template module
+
+![Alt text](shots/156.PNG)
+![Alt text](shots/157.PNG)
+
+* Now if we expose the public IP on 8080
+
+![Alt text](shots/158.PNG)
+
+=> But, there is a problem : when we run the playbook 3 tasks are getting executed every time and to fix this
+
+![Alt text](shots/159.PNG)
+![Alt text](shots/160.PNG)
+![Alt text](shots/161.PNG)
+![Alt text](shots/162.PNG)
+
+9. Now we need to configure tomcat management interface
+
+![Alt text](shots/163.PNG)
+![Alt text](shots/164.PNG)
+![Alt text](shots/165.PNG)
+![Alt text](shots/166.PNG)
+![Alt text](shots/167.PNG)
+
+=> The above playbook is written only to work on ubuntu and installs tomcat
+
+## Tags
+
+* If you have a large playbook, it may be useful to run only specific parts of it instead of running the entire playbook. * You can do this with Ansible tags. 
+* Using tags to execute or skip selected tasks is a two-step process:
+
+  1. Add tags to your tasks, either individually or with tag inheritance from a block, play, role, or import.
+  2. Select or skip tags when you run your playbook.
+
+=> Example: 
+
+![Alt text](shots/168.PNG)
+
+
+
+
