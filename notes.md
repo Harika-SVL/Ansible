@@ -989,6 +989,34 @@ Commands to execute :
 
 ![Alt text](shots/168.PNG)
 
+## Installing Tomcat10 on redhat
+    
+* Installing java-11 on redhat
+   ( refer here : https://access.redhat.com/documentation/en-us/openjdk/11/html/installing_and_using_openjdk_11_on_rhel/installing-openjdk11-on-rhel8 )
 
+* sudo yum install java-11-openjdk -y
+* java -version
+
+[ ** Note : all the further steps in the installation are same for that of installation on ubuntu ]
+
+* After installing completely we need to stop the firewall as of to expose it on the browser
+
+=> become a root user and stop the firewall service
+* sudo -i
+* systemctl stop firewalld.service
+
+* Now expose on the 8080 port
+
+=> Instead of using the whole of ubuntu playbook into the redhat file
+=> We introduce tags for every step/module used in the previous playbook
+=> We call the previous reference from ubuntu playbook having 'inclue_tasks'/'import_playbook' module using tags required in that.
+
+[ ** Note: This is not a feasible approach as the playbooks may be written log back, we need not have access to them and also making the playbook somehow reusable]
+
+
+## Roles
+
+* Roles let you automatically load related vars, files, tasks, handlers, and other Ansible artifacts based on a known file structure. 
+* After you group your content in roles, you can easily reuse them and share them with other users.
 
 
