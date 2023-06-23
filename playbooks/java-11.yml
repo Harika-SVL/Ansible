@@ -1,10 +1,10 @@
 ---
-- name: install openjdk-17-jdk
+- name: install openjdk-11-jdk
   hosts: all
   become: true
   tasks:
-    - name: install java-17
+    - name: install java-11
       ansible.builtin.apt:
-        name: openjdk-17-jdk
+        name: openjdk-11-jdk
         update_cache: yes
         state: present
