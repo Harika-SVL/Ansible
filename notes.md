@@ -1018,5 +1018,8 @@ Commands to execute :
 
 * Roles let you automatically load related vars, files, tasks, handlers, and other Ansible artifacts based on a known file structure. 
 * After you group your content in roles, you can easily reuse them and share them with other users.
+* An Ansible role has a defined directory structure with eight main standard directories. 
+* You must include at least one of these directories in each role. You can omit any directories the role does not use.
 
+=> Using ansible-galaxy of geerlingguy
 
