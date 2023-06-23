@@ -1023,3 +1023,23 @@ Commands to execute :
 
 => Using ansible-galaxy of geerlingguy
 
+
+
+
+
+
+
+## Examples for using different roles
+
+=> Use a role for nop : nop-role.yml 
+
+![Alt text](shots/169.PNG)
+
+=> Use a role for mysql : my_sql-role.yml 
+
+![Alt text](shots/170.PNG)
+
+=> Use a role for tomcat10 : tomcat10-role.yml  
+
+![Alt text](shots/171.PNG)
+

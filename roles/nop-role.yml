@@ -1,0 +1,9 @@
+---
+- name: install nopcommerce using role
+  hosts: nop
+  become: yes
+  roles:
+    - nopcommerce
+    - geerlingguy.mysql
+  vars:
+    mysql_root_password: nop123
