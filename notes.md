@@ -1021,9 +1021,10 @@ Commands to execute :
 * An Ansible role has a defined directory structure with eight main standard directories. 
 * You must include at least one of these directories in each role. You can omit any directories the role does not use.
 
-=> For example to use ready avail roles ' ansible-galaxy of geerlingguy '
+=> For example to use ready avail roles ' ansible-galaxy (geerlingguy) '
 
 ## Examples for using different roles
+
 
 => Use a role for nop : nop-role.yml 
 
@@ -1046,3 +1047,15 @@ Commands to execute :
 
    * To create/generate a default role we give 'ansible-galaxy role init <role_name>' at the destination folder
    * Then we separate the playbook modules according to the folders created in the default roles
+
+=> In the ansible node ,switch to the devops user and do the following
+
+![Alt text](shots/172.PNG)
+
+=> To get that into our windows machine we do the sftp download
+
+![Alt text](shots/173.PNG)
+
+=> After that we check for the download by following
+
+![Alt text](shots/174.PNG)
