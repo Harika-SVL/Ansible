@@ -1021,13 +1021,7 @@ Commands to execute :
 * An Ansible role has a defined directory structure with eight main standard directories. 
 * You must include at least one of these directories in each role. You can omit any directories the role does not use.
 
-=> Using ansible-galaxy of geerlingguy
-
-
-
-
-
-
+=> For example to use ready avail roles ' ansible-galaxy of geerlingguy '
 
 ## Examples for using different roles
 
@@ -1043,3 +1037,12 @@ Commands to execute :
 
 ![Alt text](shots/171.PNG)
 
+## Writing Roles
+
+* Use ansible-galaxy to create a role
+* It has two arguments : 
+   1. Collection ( creating reusable playbooks and reusable modules )
+   2. Role ( creating reusable playbooks )
+
+   * To create/generate a default role we give 'ansible-galaxy role init <role_name>' at the destination folder
+   * Then we separate the playbook modules according to the folders created in the default roles
