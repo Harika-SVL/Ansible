@@ -1148,3 +1148,17 @@ e.g: node1 ansible_host=172.31.27.136
 
 [ refer here : https://github.com/ansible-collections/community.mysql ] sample collection
 
+## Ansible Configurations
+
+* Here except the Ansible control node the node can be of any Operating System (OS)
+
+## Ansible on Windows
+
+* For logging into linux machine we use 'ssh command' but for logging into windows machine we use 'remote desktop' which has a visual interface
+* Connectivity method will be Windows Remote Management (WinRM) need to be enabled, where we can connect from the command line itself as we do in the linux machine using ssh
+* refer here : https://directdevops.blog/2021/05/24/devops-classroom-series-23-may-2021/ for stepwise process
+* We need to setup windows refer here : https://docs.ansible.com/ansible/latest/os_guide/windows_setup.html
+* we need to setup hosts, variables need to set
+=> Sample playbook
+
+![Alt text](shots/189.PNG)
