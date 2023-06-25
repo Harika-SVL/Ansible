@@ -1059,3 +1059,6 @@ Commands to execute :
 => After that we check for the download by following
 
 ![Alt text](shots/174.PNG)
+
+## Role for installing phpinfo page
+
