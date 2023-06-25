@@ -1141,4 +1141,10 @@ e.g: node1 ansible_host=172.31.27.136
 
 3. ansible.builtin.shell: module => This is a module where we can run the linux commands directly but with having python installed in the linux system
 
+## Ansible Collections
+
+* Ansible collections are distribution format(Package format)  which include roles and modules
+* Collections are a distribution format for Ansible content that can include playbooks, roles, modules, and plugins. * You can install and use collections through a distribution server, such as Ansible Galaxy, or a Pulp 3 Galaxy server.
+
+[ refer here : https://github.com/ansible-collections/community.mysql ] sample collection
 
