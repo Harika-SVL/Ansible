@@ -1062,3 +1062,55 @@ Commands to execute :
 
 ## Role for installing phpinfo page
 
+* Let's take combined.yml with variables file and seggrigate into different heading files
+* let's separate the playbook into ubuntu.yml, redhat.yml and combined.yml inorder to work with any linux machine or any different machine
+
+=> playbook : combined-vars.yml
+
+![Alt text](shots/175.PNG)
+![Alt text](shots/176.PNG)
+
+* This is the file structure we have
+
+![Alt text](shots/177.PNG)
+
+* From the above playbook we separate the modules into different existing files in roles(generic)
+* Also create a facts.json file for if any possible json dependencies
+=> handlers => main.yml
+
+ ![Alt text](shots/178.PNG)
+
+ => files => create info.php ( or any service files if needed)
+
+ ![Alt text](shots/179.PNG)
+
+ => templates => ( when we use like...jinja templates)
+
+![Alt text](shots/180.PNG)
+
+=> vars => main.yml (common variable)
+
+![Alt text](shots/181.PNG)
+
+=> vars => Ubuntu.yml (For ubuntu distribution)
+
+![Alt text](shots/182.PNG)
+
+=> vars => RedHat.yml (For redhat distribution)
+
+![Alt text](shots/183.PNG)
+
+=> Role-Use => php-info.yml (To call the roles/playbook and we create it where the roles is present)
+
+![Alt text](shots/184.PNG)
+![Alt text](shots/187.PNG)
+
+=> tasks => main.yml
+
+![Alt text](shots/185.PNG)
+![Alt text](shots/186.PNG)
+
+
+
+
+
