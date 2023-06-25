@@ -1,0 +1,9 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  gather_facts: true
+  roles:
+    - role: robertdebock.mysql
+      vars:
+        mysql_bind_address: "0.0.0.0"

@@ -1110,7 +1110,35 @@ Commands to execute :
 ![Alt text](shots/185.PNG)
 ![Alt text](shots/186.PNG)
 
+## Installing mysql role
 
+[ refer here : https://galaxy.ansible.com/robertdebock/mysql ]
 
+* To install it we run ' ansible-galaxy install robertdebock.mysql' , it gets downloaded into some home/devops/.....folder destination
+
+* To use the mysql role
+
+=> Role-Use => mysql.yml
+
+![Alt text](shots/188.PNG)
+
+* Now the playbook : ansible-playbook -i 'localhost,' mysql.yml
+* sudo systemctl status mysql
+* sudo mysql
+* show databases;
+
+## Ansible special variables
+
+[ refer here : https://docs.ansible.com/ansible/latest/reference_appendices/special_variables.html ]
+
+1. ansible_host : we can use this variable instead of having the ip addresses directly in the inventory file
+
+e.g: node1 ansible_host=172.31.27.136
+     ansible_user=devops => this is also used to change the user if different users are present
+
+2. ansible.builtin.raw: module => This is a module where we can run the linux commands directly without having python installed in the linux system
+=> In this we cannot use become:yes and need to write the command with sudo
+
+3. ansible.builtin.shell: module => This is a module where we can run the linux commands directly but with having python installed in the linux system
 
 
