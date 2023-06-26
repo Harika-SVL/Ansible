@@ -1233,7 +1233,7 @@ e.g: node1 ansible_host=172.31.27.136
 
 ![Alt text](shots/197.PNG)
 
-## Activity – 1: Write an ansible playbook to automate the above
+## Activity - 1: Write an ansible playbook to automate the above
 
 => create the following structure
 ![Alt text](shots/199.PNG)
@@ -1254,7 +1254,7 @@ e.g: node1 ansible_host=172.31.27.136
 
 * Expose over the browser ' http://<public_IP>:8080/gameoflife'
 
-## Activity – 2 : Write a role for gameoflife
+## Activity – 2: Write a role for gameoflife
 
 * create the following structure
 
@@ -1296,4 +1296,12 @@ e.g: node1 ansible_host=172.31.27.136
    * ansible-playbook -i hosts --syntax-check golr.yml
    * ansible-playbook -i hosts --list-hosts golr.yml
 
-## Activity 3: integrating ansible with jenkins
+## Activity - 3: Integrating ansible with jenkins
+
+* Writing a pipeline with Jenkins
+
+* Executing build on Jenkins
+
+## Activity - 4: Infra provisioning Ansible with Terraform
+
+* Creation of resources using Terraform
