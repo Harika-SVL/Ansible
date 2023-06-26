@@ -1162,3 +1162,55 @@ e.g: node1 ansible_host=172.31.27.136
 => Sample playbook
 
 ![Alt text](shots/189.PNG)
+
+## Ansible Dynamic inventory
+
+* If your Ansible inventory fluctuates over time, with hosts spinning up and shutting down in response to business demands, the static inventory solutions described in How to build your inventory will not serve your needs.
+* You may need to track hosts from multiple sources: cloud providers, LDAP, Cobbler, and/or enterprise CMDB systems.
+* Ansible integrates all of these options through a dynamic external inventory system. 
+* Ansible supports two ways to connect with external inventory: 
+  => Inventory plugins 
+  => Inventory scripts
+* Dynamic inventory in script form can be written in any language of your choice - The condition is this file has to be executable.
+* It should return data in the below format
+
+![Alt text](shots/190.PNG)
+![Alt text](shots/191.PNG)
+
+## Ansible in CI/CD Pipelines
+
+* Two ways of using ansible in CI/CD
+
+=> Directly from CI/CD
+
+![Alt text](shots/192.PNG)
+
+=> From Infra Provisioning
+
+![Alt text](shots/193.PNG)
+
+## Ansible Vault
+
+* It is a feature of ansible that allows you to keep sensitive data such as passwords or keys in encrypted files, rather than as plain-text in playbooks or roles 
+* These vault files can then be distributed or placed in source control(version control systems)
+* To enable this feature, a command line tool - ansible-vault - is used to edit files, and a command line flag (--ask-vault-pass, --vault-password-file or --vault-id) is used
+* Alternately, you may specify the location of a password file or command Ansible to always prompt for the password in your ansible.cfg file
+
+[These options require no command line flag usage]
+
+=> vi secrets.yml
+![Alt text](shots/194.PNG)
+=> cat secrets.yml
+ - It shows the sensitive data directly which is risky
+=> ansible-vault encrypt secrets.yml
+ - Here we need to set password for the vault
+=> cat secrets.yml
+ - the encrypted data gets displayed
+=> ansible-vault view secrets.yml
+ - To view real data we use this and it also asks for the vault password to confirm
+ - If we enter wrong password it woun't display data
+ 
+ * To automate this vault setting we rather use a password file instead of giving the password manually
+ [ this file can be any variable file ]
+
+ 
