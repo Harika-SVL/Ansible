@@ -1213,4 +1213,28 @@ e.g: node1 ansible_host=172.31.27.136
  * To automate this vault setting we rather use a password file instead of giving the password manually
  [ this file can be any variable file ]
 
- 
+ ## Game of life
+
+* To run this project we need tomcat with jdk-8
+* In the web-apps folder of tomcat we need to copy 'gameoflife.war'
+
+=> Manual steps (ubuntu 20.04) : 
+
+* sudo apt update
+* sudo apt install openjdk-8-jdk tomcat9 -y
+* cd /tmp
+* wget https://referenceapplicationskhaja.s3.us-west-2.amazonaws.com/gameoflife.war
+* sudo cp gameoflife.war /var/lib/tomcat9/webapps/gameoflife.war
+
+![Alt text](shots/195.PNG)
+![Alt text](shots/196.PNG)
+
+* Access the application : 'http://< public_IP >:8080/gameoflife '
+
+![Alt text](shots/197.PNG)
+
+## Activity – 1: Write an ansible playbook to automate the above
+
+## Activity – 2 : Write a role for gameoflife
+
+## Activity 3: integrating ansible with jenkins
