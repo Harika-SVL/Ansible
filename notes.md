@@ -1235,6 +1235,8 @@ e.g: node1 ansible_host=172.31.27.136
 
 ## Activity – 1: Write an ansible playbook to automate the above
 
+
+
 ## Activity – 2 : Write a role for gameoflife
 
 ## Activity 3: integrating ansible with jenkins
