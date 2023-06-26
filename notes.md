@@ -9,21 +9,21 @@
 ![Alt text](shots/1.PNG)
 
 * We can have mainly two deployment approaches :
-1. Declarative approach
-2. Procedural approach
+   1. Declarative approach
+   2. Procedural approach
 
 ![Alt text](shots/2.PNG)
 
 * Configuration management is the declarative deployment which ensures :
-1. Idempotence : Run this once or n times you will have same result 
-2. Desired state : We express configuration to acheive a desired state 
-3. Reusable
+   1. Idempotence : Run this once or n times you will have same result 
+   2. Desired state : We express configuration to acheive a desired state 
+   3. Reusable
 
 ## Configuration Management (CM)
 
 * There are two types :
-1. PULL based configuration
-2. PUSH based configuration
+   1. PULL based configuration
+   2. PUSH based configuration
 
 ### PULL based Configuration Management :
 
@@ -61,6 +61,7 @@
 ![Alt text](shots/8.PNG)
 
 # Ansible
+
 * Referrence : https://docs.ansible.com/ 
 
 ## Architecture and Workflow
@@ -92,7 +93,6 @@
 => Public key : It comprises of two numbers, in which one number is the result of the product of two large prime numbers. This key is provided to all the users.
 
 => Private key : It is derived from the two prime numbers involved in public key and it always remains private. 
-
 
 * To create a keypair use : 'ssh-keygen' command
 
@@ -234,7 +234,7 @@ Commands to execute :
 
 ## Sample-1 : Install apache server
 
- Manual steps :
+=> Manual steps :
 
 * sudo apt update
 * sudo apt install apache2 -y
@@ -243,7 +243,7 @@ Commands to execute :
 ![Alt text](shots/32.PNG)
 ![Alt text](shots/33.PNG)
 
-Playbook steps :
+=> Playbook steps :
 
 * Complete the entire Ansible control node - node setup
 * Create inventory and add node hosts
@@ -253,12 +253,12 @@ Playbook steps :
   -> mkdir playbooks
   -> vi playbooks/apache2.yml
 
- Playbook : playbooks/apache2.yml 
+=> Playbook : playbooks/apache2.yml 
 
 ![Alt text](shots/38.PNG)
 ![Alt text](shots/34.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/apache2.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/apache2.yml
@@ -275,7 +275,7 @@ Commands to execute :
 ## Sample-2 : Install LAMP server on ubuntu
    ( skipping mysql installation )
 
- Manual steps :
+=> Manual steps :
 
 * sudo apt update
 * sudo apt install apache2 -y
@@ -294,7 +294,7 @@ Commands to execute :
 ![Alt text](shots/41.PNG)
 ![Alt text](shots/42.PNG)
 
-Playbook steps :
+=> Playbook steps :
 
 * Complete the entire Ansible control node - node setup
 * Create inventory and add node hosts
@@ -306,17 +306,17 @@ Playbook steps :
 * For writing playbook we first search for module as 'apt in ansible'
 * Now select parameters
 
- Playbook : playbooks/lamp-ubuntu.yml
+=> Playbook : playbooks/lamp-ubuntu.yml
 
 ![Alt text](shots/46.PNG)
 
-playbook/info.php
+=> playbook/info.php
 
 * <?php phpinfo(); ?>
 
 ![Alt text](shots/45.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/lamp-ubuntu.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/lamp-ubuntu.yml
@@ -334,7 +334,7 @@ Commands to execute :
 ## Sample-3 : Install LAMP stack on Redhat9
    ( skipping mysql installation )
 
- Manual steps :
+=> Manual steps :
 
 * sudo yum install httpd -y
 * sudo systemctl enable httpd
@@ -346,7 +346,7 @@ Commands to execute :
 * sudo systemctl restart httpd
 * Verify installation 'http://public-ip/info.php' 
 
-Playbook steps :
+=> Playbook steps :
 
 * Complete the entire Ansible control node - node setup
 * Create inventory and add node hosts
@@ -356,15 +356,15 @@ Playbook steps :
   -> mkdir playbooks
   -> vi playbooks/lamp-redhat.yml
 
- Playbook : playbooks/lamp-redhat.yml
+=> Playbook : playbooks/lamp-redhat.yml
 
 ![Alt text](shots/60.PNG)
 
-playbooks/info.php
+=> playbooks/info.php
 
 * <?php phpinfo(); ?>
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/lamp-redhat.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/lamp-redhat.yml
@@ -373,7 +373,7 @@ Commands to execute :
 
 ## METRIC BEATS INSTALLATION
 
- Manual steps (using apt package):
+=> Manual steps (using apt package):
        
 * wget -q0 – https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 * sudo apt-get install apt-transport-https
@@ -386,11 +386,11 @@ Commands to execute :
 ![Alt text](shots/93.PNG)
 ![Alt text](shots/94.PNG)
 
-playbook : playbooks/metricbeat.yml
+=> playbook : playbooks/metricbeat.yml
 
 ![Alt text](shots/61.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/metricbeat.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/metricbeat.yml
@@ -407,9 +407,7 @@ Commands to execute :
 
 ### E.g.1 : playbooks/redhat.yaml
 
-
-
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/redhat.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/redhat.yml
@@ -419,7 +417,7 @@ Commands to execute :
 
 ![Alt text](shots/55.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/ubuntu.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/ubuntu.yml
@@ -438,7 +436,7 @@ Commands to execute :
 * Inventory in Ansible represents the hosts which we need to connect to.
 * Ansible inventory is broadly classified into two types :
   (a) Static inventory: 
-   * where we mention the list of nodes to connect to (in a file)
+    * where we mention the list of nodes to connect to (in a file)
   (b) Dynamic inventory: 
     * where we mention some script/plugin which will dynamically find out the nodes to connect to
 
@@ -448,8 +446,8 @@ Commands to execute :
 
   (a) INI format
 
-  * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
-  * The headings in brackets are group names, which are used in classifying hosts and deciding what hosts you are controlling at what times and for what purpose. 
+   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
+   * The headings in brackets are group names, which are used in classifying hosts and deciding what hosts you are controlling at what times and for what purpose. 
 
 E.g : INI format - hosts.ini
   
@@ -465,7 +463,7 @@ E.g : INI format - hosts.ini
 
   (b) YAML format
 
-  * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
+   * It is a configuration file that consists of a text-based content with a structure and syntax comprising key–value pairs for properties and sections that organize the properties
 
 E.g : YAML format - hosts.yml
   
@@ -485,7 +483,7 @@ E.g : YAML format - hosts.yml
  
  ## Facts
 
- * Ansible collects information about the node on which it is executing by the help of module called as 'setup'
+* Ansible collects information about the node on which it is executing by the help of module called as 'setup'
 * Playbook by default collects information about nodes where it is executing, we can use this with the help of variables
 * To display the information we use 'ansible -m 'setup' -i 'localhost, ' all' command and get a JSON format info
 * Collecting information can be disabled as well
@@ -494,7 +492,7 @@ E.g : YAML format - hosts.yml
 
 * In the playbook the facts will be collected and will be available in a special variables ansible_facts
 
-playbook : playbooks/distribution.yml
+=> playbook : playbooks/distribution.yml
 
 ![Alt text](shots/83.PNG)
 ![Alt text](shots/85.PNG)
@@ -502,7 +500,7 @@ playbook : playbooks/distribution.yml
 * The statement ansible_facts['os_family'] represents accessing os family from the facts collected
 * From facts the variables can be accessed with full names ansible_default_ipv4 or ansible_facts['default_ipv4']
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/distribution.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/distribution.yml
@@ -510,13 +508,12 @@ Commands to execute :
 
 ![Alt text](shots/84.PNG)
 
-
-playbook : playbooks/ipv4.yml
+=> playbook : playbooks/ipv4.yml
 
 ![Alt text](shots/86.PNG)
 ![Alt text](shots/87.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/ipv4.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/ipv4.yml
@@ -530,12 +527,12 @@ Commands to execute :
 * In a playbook, you may want to execute different tasks, or have different goals, depending on the value of a fact (data about the remote system), a variable, or the result of a previous task. 
 * You may want the value of some variables to depend on the value of other variables (or) you may want to create additional groups of hosts based on whether the hosts match other criteria. You can do all of these things with conditionals.
 
-playbook : playbooks/factsdemo.yml
+=> playbook : playbooks/factsdemo.yml
 
 ![Alt text](shots/90.PNG)
 ![Alt text](shots/91.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/factsdemo.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/factsdemo.yml
@@ -543,7 +540,7 @@ Commands to execute :
 
 ![Alt text](shots/92.PNG)
 
-playbook : playbooks/combined.yml
+=> playbook : playbooks/combined.yml
 
 ---
 - name: install lamp server on ubuntu
@@ -608,7 +605,7 @@ playbook : playbooks/combined.yml
         name: apache2
         state: restarted
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/combined.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/combined.yml
@@ -616,9 +613,9 @@ Commands to execute :
 
 ## NOPCOMMERCE INSTALLATION
 
- Manual steps (using apt package):
+=> Manual steps (using apt package):
 
- => Install dotnet core7
+  => Install dotnet core7
 
     * wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
     * sudo dpkg -i packages-microsoft-prod.deb
@@ -642,15 +639,15 @@ Commands to execute :
     * sudo chgrp -R nop /usr/share/nopCommerce/
     * sudo chown -R nop /usr/share/nopCommerce/
 
-=> Adding a service file
+ => Adding a service file
 
-   * sudo vi /etc/systemd/system/nopCommerce.service
+    * sudo vi /etc/systemd/system/nopCommerce.service
        
   ![Alt text](shots/51.PNG)
 
-   * sudo systemctl enable nopCommerce.service
-   * sudo systemctl start nopCommerce.service
-   * sudo systemctl status nopCommerce.service
+    * sudo systemctl enable nopCommerce.service
+    * sudo systemctl start nopCommerce.service
+    * sudo systemctl status nopCommerce.service
 
   ![Alt text](shots/52.PNG)
   ![Alt text](shots/53.PNG)
@@ -659,17 +656,17 @@ Commands to execute :
 
   ![Alt text](shots/54.PNG)
  
-playbook : playbooks/nop.yml
+=> playbook : playbooks/nop.yml
 
 ![Alt text](shots/62.PNG)
 ![Alt text](shots/63.PNG)
 ![Alt text](shots/64.PNG)
 
-service-file : playbooks/nop.service
+=> service-file : playbooks/nop.service
 
 ![Alt text](shots/97.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/nop.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/nop.yml
@@ -686,33 +683,33 @@ Commands to execute :
 
 => URL : https://www.linuxcloudvps.com/blog/how-to-install-openmrs-on-ubuntu-20-04/
 
- Manual steps (using apt package): ( skipping mysql installation)
+=>  Manual steps (using apt package): ( skipping mysql installation)
 
- * Switch as root user
- * apt-get update -y
+  * Switch as root user
+  * apt-get update -y
 
  => Install Java 8
 
-* apt-get install openjdk-8-jdk -y
-* java -version
+  * apt-get install openjdk-8-jdk -y
+  * java -version
 
 ![Alt text](shots/101.PNG)
 ![Alt text](shots/102.PNG)
 
-=> Installing tomcat7
+ => Installing tomcat7
 
-* groupadd tomcat
+  * groupadd tomcat
 useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
-* wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
-* mkdir /opt/tomcat
+  * wget https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz
+  * mkdir /opt/tomcat
 tar -xvzf apache-tomcat-7.0.109.tar.gz -C /opt/tomcat/ --strip-components=1
-* cd /opt/tomcat
+  * cd /opt/tomcat
 chgrp -R tomcat /opt/tomcat
 chmod -R g+r conf
 chmod g+x conf
 chown -R tomcat webapps/ work/ temp/ logs/
 
-=> Create a Systemd Service File for Tomcat
+ => Create a Systemd Service File for Tomcat
 
 * nano /etc/systemd/system/tomcat.service
 
@@ -728,7 +725,7 @@ chown -R tomcat webapps/ work/ temp/ logs/
 
 ![Alt text](shots/105.PNG)
 
-=> Install OpenMRS
+ => Install OpenMRS
 
 * mkdir /var/lib/OpenMRS
 chown -R tomcat:tomcat /var/lib/OpenMRS
@@ -740,18 +737,18 @@ chown -R tomcat:tomcat /var/lib/OpenMRS
 ![Alt text](shots/106.PNG)
 ![Alt text](shots/107.PNG)
 
- playbook : playbooks/openmrs.yml
+=> playbook : playbooks/openmrs.yml
 
 ![Alt text](shots/118.PNG)
 ![Alt text](shots/119.PNG)
 ![Alt text](shots/120.PNG)
 ![Alt text](shots/121.PNG)
 
- service-file : playbooks/tomcat.service
+=> service-file : playbooks/tomcat.service
 
 ![Alt text](shots/122.PNG)
 
-Commands to execute :
+=> Commands to execute :
 
 * ansible-playbook -i inventory/hosts --syntax-check playbooks/openmrs.yml
 * ansible-playbook -i inventory/hosts --list-hosts playbooks/openmrs.yml
@@ -764,7 +761,6 @@ Commands to execute :
 
 ![Alt text](shots/123.PNG)
 
-     
 ## BROADLEAF INSTALLATION
 
 => URL :  https://github.com/BroadleafCommerce
@@ -812,10 +808,7 @@ Commands to execute :
 
 ![Alt text](shots/125.PNG)
 
-
 * Expose the '< public_IPaddress of node >:8080'
-
-
 
 ## VARIABLES
 
@@ -889,7 +882,7 @@ Commands to execute :
 * sudo ln -s /opt/tomcat/apache-tomcat-${VERSION} /opt/tomcat/latest
 * sudo chown -R tomcat: /opt/tomcat
 * sudo sh -c 'chmod =x /opt/tomcat/bin/*.sh'
-*sudo nano /etc/systemd/system/tomcat.service
+* sudo nano /etc/systemd/system/tomcat.service
  
  service-file : tomcat.service
 
@@ -1013,7 +1006,6 @@ Commands to execute :
 
 [ ** Note: This is not a feasible approach as the playbooks may be written log back, we need not have access to them and also making the playbook somehow reusable]
 
-
 ## Roles
 
 * Roles let you automatically load related vars, files, tasks, handlers, and other Ansible artifacts based on a known file structure. 
@@ -1024,7 +1016,6 @@ Commands to execute :
 => For example to use ready avail roles ' ansible-galaxy (geerlingguy) '
 
 ## Examples for using different roles
-
 
 => Use a role for nop : nop-role.yml 
 
@@ -1076,6 +1067,7 @@ Commands to execute :
 
 * From the above playbook we separate the modules into different existing files in roles(generic)
 * Also create a facts.json file for if any possible json dependencies
+
 => handlers => main.yml
 
  ![Alt text](shots/178.PNG)
@@ -1137,6 +1129,7 @@ e.g: node1 ansible_host=172.31.27.136
      ansible_user=devops => this is also used to change the user if different users are present
 
 2. ansible.builtin.raw: module => This is a module where we can run the linux commands directly without having python installed in the linux system
+
 => In this we cannot use become:yes and need to write the command with sudo
 
 3. ansible.builtin.shell: module => This is a module where we can run the linux commands directly but with having python installed in the linux system
@@ -1144,7 +1137,8 @@ e.g: node1 ansible_host=172.31.27.136
 ## Ansible Collections
 
 * Ansible collections are distribution format(Package format)  which include roles and modules
-* Collections are a distribution format for Ansible content that can include playbooks, roles, modules, and plugins. * You can install and use collections through a distribution server, such as Ansible Galaxy, or a Pulp 3 Galaxy server.
+* Collections are a distribution format for Ansible content that can include playbooks, roles, modules, and plugins. 
+* You can install and use collections through a distribution server, such as Ansible Galaxy, or a Pulp 3 Galaxy server.
 
 [ refer here : https://github.com/ansible-collections/community.mysql ] sample collection
 
@@ -1159,6 +1153,7 @@ e.g: node1 ansible_host=172.31.27.136
 * refer here : https://directdevops.blog/2021/05/24/devops-classroom-series-23-may-2021/ for stepwise process
 * We need to setup windows refer here : https://docs.ansible.com/ansible/latest/os_guide/windows_setup.html
 * we need to setup hosts, variables need to set
+
 => Sample playbook
 
 ![Alt text](shots/189.PNG)
@@ -1199,13 +1194,18 @@ e.g: node1 ansible_host=172.31.27.136
 [These options require no command line flag usage]
 
 => vi secrets.yml
+
 ![Alt text](shots/194.PNG)
+
 => cat secrets.yml
  - It shows the sensitive data directly which is risky
+
 => ansible-vault encrypt secrets.yml
  - Here we need to set password for the vault
+
 => cat secrets.yml
  - the encrypted data gets displayed
+
 => ansible-vault view secrets.yml
  - To view real data we use this and it also asks for the vault password to confirm
  - If we enter wrong password it woun't display data
@@ -1236,15 +1236,19 @@ e.g: node1 ansible_host=172.31.27.136
 ## Activity - 1: Write an ansible playbook to automate the above
 
 => create the following structure
+
 ![Alt text](shots/199.PNG)
 
 => gol => host-vars => localhost.yml
+
 ![Alt text](shots/200.PNG)
 
 => gol => gol-vars.yml
+
 ![Alt text](shots/198.PNG)
 
 => gol => hosts 
+
 ![Alt text](shots/200.PNG)
 
 * Execute and check for working of playbook
