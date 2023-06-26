@@ -1235,8 +1235,65 @@ e.g: node1 ansible_host=172.31.27.136
 
 ## Activity – 1: Write an ansible playbook to automate the above
 
+=> create the following structure
+![Alt text](shots/199.PNG)
 
+=> gol => host-vars => localhost.yml
+![Alt text](shots/200.PNG)
+
+=> gol => gol-vars.yml
+![Alt text](shots/198.PNG)
+
+=> gol => hosts 
+![Alt text](shots/200.PNG)
+
+* Execute and check for working of playbook
+   * ansible-playbook -i hosts --syntax-check gol-vars.yml
+   * ansible-playbook -i hosts --list-hosts gol-vars.yml
+   * ansible-playbook -i hosts gol-vars.yml
+
+* Expose over the browser ' http://<public_IP>:8080/gameoflife'
 
 ## Activity – 2 : Write a role for gameoflife
+
+* create the following structure
+
+=> gol => role_usage => roles, golr.yml => roles => paste generic folder and rename as gol-role
+
+![Alt text](shots/201.PNG)
+
+* Configuring tasks
+
+=> roles => tasks => main.yml (paste tasks from gol-vars.yml)
+
+![Alt text](shots/202.PNG)
+
+* Configuring handlers
+
+=> roles => handlers => main.yml (paste handlers from gol-vars.yml)
+
+![Alt text](shots/203.PNG)
+
+* Configuring defaults
+
+=> roles => defaults => main.yml (paste defaults from host-vars => localhost.yml)
+
+![Alt text](shots/204.PNG)
+
+* Writing role in golr.yml
+
+=> role_usage => golr.yml
+
+![Alt text](shots/205.PNG)
+
+* Adding hosts in roles_usage
+
+=> role_usage => hosts
+
+![Alt text](shots/206.PNG)
+
+* Execute and check for working of role
+   * ansible-playbook -i hosts --syntax-check golr.yml
+   * ansible-playbook -i hosts --list-hosts golr.yml
 
 ## Activity 3: integrating ansible with jenkins
